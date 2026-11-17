@@ -928,8 +928,8 @@ function renderHistory() {
         return '<li class="h-item"><div class="h-top"><span>' + dLong(new Date(h.at)) + (h.example ? ' · example' : '') + '</span>' +
           '<span class="pill" data-s="' + (TONE_S[V.tone] || '') + '">' + (typeof h.fails === 'number' ? (h.fails ? h.fails + ' to work on' : 'Nothing blocking') : 'Saved') + '</span></div>' +
           '<div class="h-head">' + V.head + '</div><div class="h-nums">' + nums + '</div>' +
-          '<div class="h-acts"><button class="btn ghost" type="button" data-load="' + h.id + '">Load these numbers</button>' +
-          '<button class="btn ghost danger" type="button" data-del="' + h.id + '">Delete</button></div></li>';
+          '<div class="h-acts"><button class="btn ghost" type="button" data-load="' + esc(h.id) + '">Load these numbers</button>' +
+          '<button class="btn ghost danger" type="button" data-del="' + esc(h.id) + '">Delete</button></div></li>';
       }).join('');
 }
 
@@ -986,7 +986,7 @@ function twoStep(btn, action, armedText) {
   });
 }
 // ---------- outlets ----------
-function useOutlet(o) { state = o; store.current = o.id; fill(); showStep(); refresh(); renderHistory(); renderOutlets(); }
+function useOutlet(o) { if (editMode) closeEdit(); state = o; store.current = o.id; fill(); showStep(); refresh(); renderHistory(); renderOutlets(); }
 function renderOutlets() {
   const pick = $('outlet-pick'); pick.textContent = '';
   store.outlets.forEach(o => { const op = document.createElement('option'); op.value = o.id; op.textContent = o.name; op.selected = o.id === state.id; pick.appendChild(op); });
@@ -1017,7 +1017,7 @@ function saveEdit() {
     toast('Added ' + o.name); $('f-dineOrders').focus();
     return;
   }
-  if (name && name !== state.name) { state.name = name; renderOutlets(); refresh(); renderHistory(); toast('Renamed to ' + name); }
+  if (name && name !== state.name) { state.name = name; state.example = false; renderOutlets(); refresh(); renderHistory(); toast('Renamed to ' + name); }
   if (mode === 'start') $('f-dineOrders').focus(); else $('btn-rename').focus();
 }
 const countOutlets = n => n + (n === 1 ? ' outlet' : ' outlets');
@@ -1118,11 +1118,12 @@ function wire() {
     toast('Backup restored: ' + countOutlets(incoming.length));
   });
   twoStep($('btn-clear'), () => { resetOutlet(state, false); useOutlet(state); toast('Numbers cleared. Saved checks are kept.'); });
-  // Example numbers open in their own outlet, so they never overwrite real ones.
+  // Example numbers open in their own outlet, so they never overwrite real ones. An existing example outlet is
+  // only switched to, never reset, because someone may have typed their own numbers into it.
   $('btn-example').addEventListener('click', () => {
     let o = store.outlets.find(x => x.example && x.name === 'Example outlet');
-    if (o) resetOutlet(o, true); else { o = newOutlet('Example outlet', true); store.outlets.push(o); }
-    useOutlet(o); location.hash = '#numbers'; toast('Showing the example outlet. Your outlets are unchanged.');
+    if (!o) { o = newOutlet('Example outlet', true); store.outlets.push(o); }
+    useOutlet(o); location.hash = '#numbers'; toast('Showing the example outlet. Your other outlets are unchanged.');
   });
   twoStep($('btn-del-outlet'), () => {
     if (store.outlets.length < 2) return;
