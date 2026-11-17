@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Burgerium Outlet Check</title>
+<meta name="description" content="Eight tests that show whether marketing can fix a restaurant outlet, or something else has to change first.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#eceff2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f141a" media="(prefers-color-scheme: dark)">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Outlet Check">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Layout: one phone-width column. A verdict strip stays on top; numbers go in six short steps; the verdict prints as a till receipt. */
+  --bg:#eceff2; --surface:#ffffff; --ink:#15202b; --muted:#5a6673; --line:#d3d9e0;
+  --accent:#f2b705; --accent-soft:#fdf3cf; --accent-ink:#6b4f00;
+  --good:#1c7a4b; --good-soft:#dff3e8; --warn:#a86200; --warn-soft:#fbecd3; --bad:#b3261e; --bad-soft:#fbe1df;
+  --display:"Bricolage Grotesque","Arial Narrow",system-ui,sans-serif;
+  --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0f141a; --surface:#182029; --ink:#e9eef3; --muted:#9ba7b3; --line:#2b3642;
+    --accent:#f2b705; --accent-soft:#3a3110; --accent-ink:#f5cf55;
+    --good:#62cf97; --good-soft:#143525; --warn:#f0b259; --warn-soft:#3a2b10; --bad:#ff8f86; --bad-soft:#3d1a18;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0f141a; --surface:#182029; --ink:#e9eef3; --muted:#9ba7b3; --line:#2b3642;
+  --accent:#f2b705; --accent-soft:#3a3110; --accent-ink:#f5cf55;
+  --good:#62cf97; --good-soft:#143525; --warn:#f0b259; --warn-soft:#3a2b10; --bad:#ff8f86; --bad-soft:#3d1a18;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none !important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5}
+.wrap{max-width:680px;margin-inline:auto;padding-inline:16px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0}
+p{margin:0}
+a{color:inherit}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--ink);outline-offset:2px;border-radius:4px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.small{font-size:13.5px;color:var(--muted)}
+
+/* Header */
+.top{padding-block:22px 14px}
+.brand{display:flex;align-items:center;gap:8px}
+.logo{width:26px;height:26px;flex:none}
+.logo .bun{fill:var(--accent)} .logo .patty{fill:var(--ink)} .logo .seed{fill:var(--bg)}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.top h1{font-size:clamp(28px,7.6vw,40px);line-height:1.04;font-weight:800;letter-spacing:-.02em;margin:10px 0 8px}
+.top h1 mark{background:linear-gradient(transparent 58%,var(--accent) 58%);color:inherit;padding:0 2px}
+.lede{color:var(--muted);max-width:56ch;font-size:15px}
+
+/* Sticky verdict strip */
+.bar{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+.bar-in{display:flex;align-items:center;gap:10px;padding-block:10px 6px}
+.dot{flex:none;width:12px;height:12px;border-radius:50%;background:var(--muted)}
+.bar[data-tone="good"] .dot{background:var(--good)}
+.bar[data-tone="warn"] .dot{background:var(--warn)}
+.bar[data-tone="bad"] .dot{background:var(--bad)}
+.bar-text{flex:1;min-width:0;line-height:1.25}
+.bar-text strong{display:block;font-family:var(--display);font-weight:700;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar-text span{display:block;font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media (max-width:519px){.bar-text span{display:none}}
+.marks{display:flex;gap:3px;flex:none}
+.marks i{width:8px;height:18px;border-radius:2px;background:var(--line)}
+.marks i[data-s="pass"]{background:var(--good)}
+.marks i[data-s="partial"]{background:var(--warn)}
+.marks i[data-s="fail"]{background:var(--bad)}
+.tabs{display:flex}
+.tabs a{flex:1;text-align:center;text-decoration:none;font-weight:500;font-size:14px;padding:9px 4px 8px;color:var(--muted);border-bottom:3px solid transparent;white-space:nowrap}
+.tabs a[aria-current="page"]{color:var(--ink);border-bottom-color:var(--accent)}
+
+main{padding-block:16px 72px}
+.view{display:flex;flex-direction:column;gap:16px}
+
+/* Buttons and notices */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;border:1px solid var(--ink);background:var(--ink);color:var(--bg);border-radius:8px;padding:10px 16px;font-family:var(--body);font-weight:600;font-size:15px;line-height:1.2;cursor:pointer;text-decoration:none}
+.btn.ghost{background:var(--surface);color:var(--ink);border-color:var(--line)}
+.btn.danger{color:var(--bad)}
+.btn:disabled{opacity:.4;cursor:default}
+.btn-row{display:flex;flex-wrap:wrap;gap:10px}
+.file:focus-within{outline:2px solid var(--ink);outline-offset:2px}
+.note{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;background:var(--accent-soft);color:var(--accent-ink);border-radius:12px;padding:12px 14px;font-size:14px}
+.note p{flex:1 1 220px;color:inherit}
+
+/* Step chips */
+.chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin-inline:-16px;padding:2px 16px}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;display:flex;align-items:center;gap:7px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 12px 5px 5px;cursor:pointer;font-size:14px;font-weight:500;color:var(--muted)}
+.chip-n{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-family:var(--mono);font-size:12px;font-weight:600;background:var(--bg);color:var(--muted)}
+.chip-c{font-family:var(--mono);font-size:11.5px;color:var(--muted)}
+.chip[data-s="done"] .chip-n{background:var(--good);color:var(--surface)}
+.chip[data-s="bad"] .chip-n{background:var(--bad);color:var(--surface)}
+.chip[aria-current="step"]{border-color:var(--ink);color:var(--ink);background:var(--accent-soft)}
+
+/* Step card and fields */
+.step{border:1px solid var(--line);background:var(--surface);border-radius:14px;margin:0;padding:16px 16px 18px;min-width:0}
+.step-head{display:flex;flex-direction:column;gap:2px;margin-bottom:14px}
+.step-k{font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.step-head h2{font-size:22px;font-weight:700;outline:none}
+.sec-note{font-size:14px;color:var(--muted)}
+.fields{display:flex;flex-direction:column;gap:14px}
+@media (min-width:560px){.fields.two{display:grid;grid-template-columns:1fr 1fr;gap:14px 16px}}
+.field label{display:block;font-weight:500;font-size:15px;line-height:1.3;margin-bottom:6px}
+.opt{font-family:var(--mono);font-size:11px;color:var(--muted);font-weight:400;margin-left:6px}
+.inp{display:flex;align-items:stretch;border:1px solid var(--line);border-left-width:4px;border-radius:8px;background:var(--bg);overflow:hidden}
+.field.need .inp{border-left-color:var(--accent)}
+.field.ok .inp{border-left-color:var(--good)}
+.field.bad .inp{border-color:var(--bad)}
+.inp:focus-within{outline:2px solid var(--ink);outline-offset:1px}
+.inp input{flex:1;min-width:0;border:0;background:transparent;padding:11px 10px;font-family:var(--mono);font-size:16px;font-variant-numeric:tabular-nums;outline:none}
+.unit{display:flex;align-items:center;padding:0 10px;font-family:var(--mono);font-size:13px;color:var(--muted);white-space:nowrap}
+.unit.pre{padding-right:0}
+.hint{font-size:13px;color:var(--muted);margin-top:4px}
+.err{font-size:13px;color:var(--bad);margin-top:4px;font-weight:500}
+.field.off{opacity:.5}
+.sum{margin-top:16px;padding:12px 14px;border-radius:10px;background:var(--bg);border-left:4px solid var(--accent);font-size:14.5px}
+.sum:empty{display:none}
+.sum b{font-family:var(--mono);font-weight:600;font-variant-numeric:tabular-nums}
+.neg{color:var(--bad)}
+.step-nav{display:flex;gap:10px}
+.step-nav #btn-next{flex:1}
+
+/* Receipt */
+.ticket{position:relative;background:var(--surface);margin:8px 0;padding:22px 18px 20px;font-family:var(--mono);font-size:13.5px;font-variant-numeric:tabular-nums}
+.ticket::before,.ticket::after{content:"";position:absolute;left:0;right:0;height:6px;background-size:12px 6px;background-repeat:repeat-x}
+.ticket::before{top:-6px;background-image:radial-gradient(circle at 6px 6px,var(--surface) 5.5px,transparent 6px)}
+.ticket::after{bottom:-6px;background-image:radial-gradient(circle at 6px 0,var(--surface) 5.5px,transparent 6px)}
+.t-head{display:flex;justify-content:space-between;gap:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-size:12px}
+.stamp{display:inline-block;margin:16px 0 10px;padding:5px 10px;border:2px solid currentColor;border-radius:4px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;font-size:12px;transform:rotate(-2deg);color:var(--muted)}
+.ticket[data-tone="good"] .stamp{color:var(--good)}
+.ticket[data-tone="warn"] .stamp{color:var(--warn)}
+.ticket[data-tone="bad"] .stamp{color:var(--bad)}
+.t-verdict{font-family:var(--display);font-weight:800;font-size:clamp(24px,7vw,32px);line-height:1.08;letter-spacing:-.01em}
+.t-tail{font-family:var(--body);font-size:15px;margin-top:6px}
+.t-next{font-family:var(--body);font-size:15px;margin-top:12px;padding:10px 12px;border-left:4px solid var(--accent);background:var(--bg)}
+.t-missing{font-family:var(--body);font-size:14.5px;margin-top:8px}
+.t-missing + .btn{margin-top:12px}
+.rule{border:0;border-top:1px dashed var(--line);margin:18px 0 14px}
+.t-title{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:8px}
+.meter-track{position:relative;height:14px;border-radius:7px;background:var(--bg)}
+.meter-fill{position:absolute;left:0;top:0;bottom:0;border-radius:7px;background:var(--warn)}
+.meter[data-tone="good"] .meter-fill,.meter[data-tone="good"] .k-now{background:var(--good)}
+.meter[data-tone="bad"] .meter-fill,.meter[data-tone="bad"] .k-now{background:var(--bad)}
+.meter-be{position:absolute;top:-5px;bottom:-5px;width:3px;margin-left:-1.5px;background:var(--ink);border-radius:2px}
+.meter-key{display:flex;justify-content:space-between;gap:10px;margin-top:8px;font-size:12.5px;color:var(--muted)}
+.meter-key i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+.k-now{background:var(--warn)}
+.k-be{background:var(--ink);width:3px !important}
+.meter-msg{font-family:var(--body);font-size:15px;font-weight:600;margin-top:6px}
+.tests{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+.test-row{display:flex;align-items:flex-start;gap:10px}
+.test-n{flex:none;width:18px;color:var(--muted)}
+.test-q{flex:1;min-width:0;font-family:var(--body);font-size:15px;font-weight:500}
+.test-q small{display:block;font-family:var(--mono);font-weight:400;font-size:12.5px;color:var(--muted)}
+.pill{flex:none;font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.06em;padding:3px 7px;border-radius:4px;background:var(--line);color:var(--muted);white-space:nowrap}
+.pill[data-s="pass"]{background:var(--good-soft);color:var(--good)}
+.pill[data-s="partial"]{background:var(--warn-soft);color:var(--warn)}
+.pill[data-s="fail"]{background:var(--bad-soft);color:var(--bad)}
+.test-why{font-family:var(--body);font-size:14px;margin:6px 0 0 28px;padding-left:10px;border-left:2px solid var(--bad)}
+.test-why[data-s="partial"]{border-left-color:var(--warn)}
+.lines{display:flex;flex-direction:column;gap:7px}
+.line{display:flex;align-items:baseline;gap:6px}
+.line span:first-child{font-family:var(--body);font-size:14px}
+.line .lead{flex:1;border-bottom:1px dotted var(--muted);opacity:.5;min-width:12px;transform:translateY(-3px)}
+.line b{font-weight:600;white-space:nowrap}
+.t-foot{margin-top:16px;font-family:var(--body);font-size:12.5px;color:var(--muted)}
+#copy-fallback{width:100%;min-height:180px;font-family:var(--mono);font-size:13px;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:10px}
+details.card{border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:12px 14px}
+details.card summary{cursor:pointer;font-family:var(--display);font-weight:700;font-size:17px}
+details.card summary span{display:block;font-family:var(--body);font-weight:400;font-size:13px;color:var(--muted)}
+details.card .fields{margin-top:12px}
+
+/* Panels, tracker, history */
+.panel{border:1px solid var(--line);background:var(--surface);border-radius:14px;padding:16px}
+.panel h2{font-size:20px;font-weight:700;margin-bottom:4px}
+.panel > .fields{margin-top:14px}
+.facts{margin-top:14px;display:flex;flex-direction:column;gap:6px;font-size:14px}
+.facts b{font-family:var(--mono);font-weight:600}
+.chart{width:100%;height:auto;display:block;margin-top:12px}
+.chart text{font-family:var(--mono);font-size:10px;fill:var(--muted)}
+.chart .val{fill:var(--ink);font-weight:600}
+.chart .base{stroke:var(--line)}
+.chart .target{stroke:var(--ink);stroke-dasharray:4 3;stroke-width:1.5}
+.chart .b-pass{fill:var(--good)} .chart .b-partial{fill:var(--warn)} .chart .b-fail{fill:var(--bad)} .chart .b-none{fill:var(--muted)}
+.chart .l-now{fill:none;stroke:var(--ink);stroke-width:2.5;stroke-linejoin:round}
+.chart .l-be{fill:none;stroke:var(--muted);stroke-width:1.5;stroke-dasharray:5 4}
+.chart .p-now{fill:var(--ink)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12.5px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:18px;height:0;border-top:2.5px solid var(--ink);margin-right:6px;vertical-align:middle}
+.legend i.dash{border-top:1.5px dashed var(--muted)}
+.chart-empty{margin-top:12px;padding:14px;border:1px dashed var(--line);border-radius:10px;text-align:center}
+.col-head{display:grid;grid-template-columns:62px 1fr 1fr;gap:8px;font-size:12px;color:var(--muted);margin-top:16px}
+.weeks{display:flex;flex-direction:column;gap:10px;margin-top:8px}
+.week{display:grid;grid-template-columns:62px 1fr 1fr;gap:6px 8px;align-items:center;padding-top:10px;border-top:1px dashed var(--line)}
+.week:first-child{border-top:0;padding-top:0}
+.week-n{font-family:var(--mono);font-size:13px;line-height:1.25}
+.week-n small{display:block;font-size:11px;color:var(--muted)}
+.week .inp input{padding:9px 8px}
+.week-s{grid-column:2 / -1;font-size:13px;display:flex;gap:8px;align-items:center}
+.week-s:empty{display:none}
+.cash{margin-top:16px}
+.cash-top{display:flex;justify-content:space-between;gap:10px;font-size:14px;margin-bottom:6px}
+.cash-top b{font-family:var(--mono);font-weight:600}
+.cash-track{height:10px;border-radius:5px;background:var(--bg);overflow:hidden}
+.cash-fill{height:100%;background:var(--warn)}
+.cash-fill[data-over="1"]{background:var(--bad)}
+.hist{list-style:none;margin:14px 0 0;padding:0;display:flex;flex-direction:column;gap:10px}
+.h-item{border:1px solid var(--line);border-radius:10px;padding:12px}
+.h-top{display:flex;justify-content:space-between;align-items:center;gap:10px;font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+.h-head{font-family:var(--display);font-weight:700;font-size:17px;margin-top:4px}
+.h-nums{font-family:var(--mono);font-size:12.5px;margin-top:2px;font-variant-numeric:tabular-nums}
+.h-acts{display:flex;gap:8px;margin-top:10px}
+.h-acts .btn{min-height:36px;padding:6px 12px;font-size:14px}
+.panel .btn-row{margin-top:12px}
+
+/* Toast */
+.toast{position:fixed;left:50%;bottom:20px;transform:translate(-50%,16px);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:999px;font-size:14px;font-weight:500;opacity:0;pointer-events:none;max-width:calc(100% - 32px);z-index:20;text-align:center}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media (prefers-reduced-motion:no-preference){
+  .toast{transition:opacity .2s ease,transform .2s ease}
+  .marks i,.dot,.pill,.meter-fill{transition:background-color .25s ease}
+}
+
+@media print{
+  body{background:#fff}
+  .top,.bar,.btn-row,details.card,#copy-fallback,.toast,#view-numbers,#view-tracker,#view-history{display:none !important}
+  #view-verdict{display:block !important}
+  .ticket{margin:0;padding:0}
+  .ticket::before,.ticket::after{display:none}
+}
+</style>
+</head>
+<body>
+<header class="wrap top">
+  <div class="brand">
+    <svg class="logo" viewBox="0 0 48 48" aria-hidden="true"><path class="bun" d="M7 23a17 13 0 0 1 34 0z"/><circle class="seed" cx="18" cy="16" r="1.4"/><circle class="seed" cx="25" cy="13" r="1.4"/><circle class="seed" cx="31" cy="17" r="1.4"/><rect class="patty" x="6" y="25.5" width="36" height="6" rx="3"/><rect class="bun" x="7" y="33.5" width="34" height="7" rx="3.5"/></svg>
+    <span class="eyebrow">Burgerium · Outlet check</span>
+  </div>
+  <h1>Can <mark>marketing</mark> fix this outlet?</h1>
+  <p class="lede">Enter your averages from the last three months. Eight tests show whether promotion is the fix, or something else has to change first.</p>
+</header>
+
+<div class="bar" id="bar" data-tone="wait">
+  <div class="wrap">
+    <div class="bar-in">
+      <span class="dot" aria-hidden="true"></span>
+      <div class="bar-text" aria-live="polite"><strong id="bar-head">Loading</strong><span id="bar-tail"></span></div>
+      <div class="marks" id="marks" aria-hidden="true"></div>
+    </div>
+    <nav class="tabs" aria-label="Sections">
+      <a href="#numbers" id="tab-numbers">Numbers</a>
+      <a href="#verdict" id="tab-verdict">Verdict</a>
+      <a href="#tracker" id="tab-tracker">60 days</a>
+      <a href="#history" id="tab-history">History</a>
+    </nav>
+  </div>
+</div>
+
+<main class="wrap">
+  <section id="view-numbers" class="view" aria-label="Your numbers">
+    <div class="note" id="example-note" hidden>
+      <p><strong>These are example numbers, not Burgerium’s.</strong> Change any of them to see the verdict move, then start your own.</p>
+      <button class="btn" type="button" id="btn-start">Enter my numbers</button>
+    </div>
+    <div class="chips" id="chips" aria-label="Steps"></div>
+    <form id="form" novalidate></form>
+    <div class="step-nav">
+      <button class="btn ghost" type="button" id="btn-back">Back</button>
+      <button class="btn" type="button" id="btn-next">Next</button>
+    </div>
+    <p class="small" id="save-note"></p>
+  </section>
+
+  <section id="view-verdict" class="view" aria-label="Verdict" hidden>
+    <div class="ticket" id="ticket" data-tone="wait"></div>
+    <div class="btn-row">
+      <button class="btn" type="button" id="btn-save">Save this check</button>
+      <button class="btn ghost" type="button" id="btn-copy">Copy summary</button>
+      <button class="btn ghost" type="button" id="btn-share" hidden>Share</button>
+      <button class="btn ghost" type="button" id="btn-print" hidden>Print or save PDF</button>
+    </div>
+    <textarea id="copy-fallback" readonly hidden aria-label="Summary text to copy"></textarea>
+    <details class="card">
+      <summary>Pass marks <span>The limits each test uses. Change them if you disagree.</span></summary>
+      <div class="fields two" id="thr-fields"></div>
+      <div class="btn-row" style="margin-top:14px"><button class="btn ghost" type="button" id="btn-thr">Reset pass marks</button></div>
+    </details>
+  </section>
+
+  <section id="view-tracker" class="view" aria-label="60-day test" hidden>
+    <div class="panel">
+      <h2>Agree the stop rule before week 1</h2>
+      <p class="small">If the outlet misses the target by week 6, or the test uses more cash than agreed, stop. Decide this now, while nobody is emotional about it.</p>
+      <div class="fields two" id="rule-fields"></div>
+      <div class="facts" id="rule-facts"></div>
+    </div>
+    <div class="panel">
+      <h2>Weekly scorecard</h2>
+      <p class="small">Fill one row each week. Type a loss as a minus number, like -45000.</p>
+      <div id="trk-chart"></div>
+      <div class="col-head"><span>Week</span><span>Orders a day</span><span>Profit or loss (₹)</span></div>
+      <div class="weeks" id="weeks"></div>
+      <div id="cash-box"></div>
+    </div>
+  </section>
+
+  <section id="view-history" class="view" aria-label="History" hidden>
+    <div class="panel">
+      <h2>Saved checks</h2>
+      <p class="small">Save a check once a month. The line shows whether the outlet is closing the gap to break-even.</p>
+      <div id="hist-chart"></div>
+      <ol class="hist" id="hist"></ol>
+    </div>
+    <div class="panel">
+      <h2>Your data</h2>
+      <p class="small" id="data-note"></p>
+      <div class="btn-row" id="backup-row">
+        <button class="btn" type="button" id="btn-backup">Download backup</button>
+        <label class="btn ghost file">Restore from backup<input class="sr" type="file" id="file-restore" accept=".json,application/json"></label>
+      </div>
+      <div class="btn-row">
+        <button class="btn ghost" type="button" id="btn-example">Load example numbers</button>
+        <button class="btn ghost danger" type="button" id="btn-clear">Clear my numbers</button>
+      </div>
+      <div class="btn-row" id="install-box" hidden><button class="btn" type="button" id="btn-install">Install on this phone</button></div>
+      <p class="small" id="ios-hint" style="margin-top:12px" hidden>To keep it on your iPhone: tap Share, then Add to Home Screen.</p>
+    </div>
+  </section>
+</main>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script id="logic">
+const Logic = (() => {
+  // v: numbers (percentages as fractions). t: pass marks.
+  function compute(v, t) {
+    const orders = v.dineOrders + v.delOrders;
+    const ordersDay = v.days > 0 ? orders / v.days : 0;
+    const sales = v.dineOrders * v.dineBill + v.delOrders * v.delAOV;
+    const cDine = v.dineBill * (1 - v.foodPct - v.discPct - v.otherVarPct);
+    const cDel = v.delAOV * (1 - v.foodPct - v.commPct - v.discPct - v.otherVarPct) - v.pack;
+    const contrib = v.dineOrders * cDine + v.delOrders * cDel;
+    const margin = sales > 0 ? contrib / sales : 0;
+    const cBlend = orders > 0 ? contrib / orders : 0;
+    const fixed = v.rent + v.salaries + v.utilities + v.marketing + v.otherFixed;
+    const profit = contrib - fixed;
+    const beDay = (cBlend > 0 && v.days > 0) ? fixed / cBlend / v.days : null;
+    const gap = (beDay !== null && ordersDay > 0) ? beDay / ordersDay : null;
+    const profit2x = 2 * contrib - fixed;
+    const maxDine = v.guests > 0 ? v.seats * v.turns / v.guests : 0;
+    const profitFull = maxDine * v.days * cDine + v.delOrders * cDel - fixed;
+    const runway = profit >= 0 ? null : v.cash / (-profit);
+    const channels = [];
+    if (v.dineOrders > 0) channels.push(cDine);
+    if (v.delOrders > 0) channels.push(cDel);
+    const weakest = channels.length ? Math.min(...channels) : cDine;
+
+    const s = [
+      weakest > 0 ? 'pass' : 'fail',
+      profit2x > 0 ? 'pass' : 'fail',
+      profitFull > 0 ? 'pass' : 'fail',
+      v.repeat >= t.minRepeat ? 'pass' : 'fail',
+      v.prodComplaints <= t.maxProd ? 'pass' : 'fail',
+      v.priceComplaints <= t.maxPrice ? 'pass' : 'fail',
+      gap === null ? 'fail' : gap <= t.gapOK ? 'pass' : gap <= t.gapStruct ? 'partial' : 'fail',
+      runway === null ? 'pass' : runway >= t.minMonths ? 'pass' : 'fail'
+    ];
+    let verdict;
+    if (s[0] === 'fail') verdict = 'orders';
+    else if (s[1] === 'fail') verdict = 'costs';
+    else if (s[7] === 'fail') verdict = 'cash';
+    else if (s[3] === 'fail' || s[4] === 'fail') verdict = 'product';
+    else if (s[5] === 'fail') verdict = 'price';
+    else if (s[6] === 'fail') verdict = 'structural';
+    else if (s[2] === 'fail') verdict = 'dinein';
+    else if (s[6] === 'partial') verdict = 'partial';
+    else verdict = 'yes';
+
+    return {
+      m: { ordersDay, sales, cDine, cDel, contrib, margin, cBlend, fixed, profit, beDay, gap, profit2x, maxDine, profitFull, runway, weakest,
+           actionRate: (v.views && v.actions != null) ? v.actions / v.views : null },
+      status: s, verdict
+    };
+  }
+
+  // weeks: [{o: orders/day or null, p: profit or null}], target and limit may be null.
+  function tracker(weeks, target, limit) {
+    let cum = 0;
+    return weeks.map((w, i) => {
+      if (w.p != null) cum += w.p;
+      const used = Math.max(0, -cum);
+      let status = '';
+      if (w.o != null) {
+        if (limit != null && used > limit) status = 'stop-cash';
+        else if (target == null) status = 'no-target';
+        else if (w.o >= target) status = 'on';
+        else if (i + 1 >= 6) status = 'stop-target';
+        else status = 'behind';
+      }
+      return { used, status };
+    });
+  }
+  return { compute, tracker };
+})();
+</script>
+
+<script>
+(() => {
+const $ = id => document.getElementById(id);
+const KEY = 'burgerium-outlet-check-v2', KEY_OLD = 'burgerium-outlet-check-v1';
+const framed = (() => { try { return window.self !== window.top; } catch (e) { return true; } })();
+
+const SECTIONS = [
+  { id:'orders', short:'Orders', title:'Orders and bills', note:'Monthly averages from the last three months.', fields:[
+    { id:'days', label:'Days open per month', hint:'Usually 30.', type:'num', ex:'30' },
+    { id:'dineOrders', label:'Dine-in orders per month', hint:'From your POS or billing software.', type:'num', ex:'1500' },
+    { id:'delOrders', label:'Delivery orders per month', hint:'Swiggy and Zomato partner dashboards. Enter 0 if you are not listed.', type:'num', ex:'600' },
+    { id:'dineBill', label:'Average dine-in bill', hint:'Before GST. Dine-in sales ÷ dine-in orders.', type:'inr', ex:'550' },
+    { id:'delAOV', label:'Average delivery order value', hint:'Before GST and before commission.', type:'inr', del:true, ex:'480' }
+  ]},
+  { id:'costs', short:'Costs', title:'Cost of each order', note:'Costs that rise and fall with sales.', fields:[
+    { id:'foodPct', label:'Food and drink cost', hint:'Purchases ÷ sales, adjusted for stock change.', type:'pct', unit:'% of sales', ex:'34' },
+    { id:'discPct', label:'Discounts you pay for', hint:'POS discounts plus app offers you fund.', type:'pct', unit:'% of sales', ex:'5' },
+    { id:'otherVarPct', label:'Other costs that grow with sales', hint:'Gas, card and UPI fees, consumables.', type:'pct', unit:'% of sales', ex:'3' },
+    { id:'commPct', label:'Swiggy and Zomato commission and fees', hint:'(Order value − payout) ÷ order value. Put in-app ads under marketing.', type:'pct', unit:'% of delivery', del:true, ex:'28' },
+    { id:'pack', label:'Packaging per delivery order', hint:'Packaging purchases ÷ delivery orders.', type:'inr', del:true, ex:'25' }
+  ]},
+  { id:'bills', short:'Bills', title:'Monthly bills', note:'What you pay whether or not anyone walks in.', fields:[
+    { id:'rent', label:'Rent and maintenance', hint:'From the lease.', type:'inr', unit:'a month', ex:'250000' },
+    { id:'salaries', label:'Salaries', hint:'Include staff food and stay.', type:'inr', unit:'a month', ex:'300000' },
+    { id:'utilities', label:'Electricity, water, internet', hint:'From the bills.', type:'inr', unit:'a month', ex:'60000' },
+    { id:'marketing', label:'Marketing', hint:'Ads, influencers and in-app ads.', type:'inr', unit:'a month', ex:'40000' },
+    { id:'otherFixed', label:'Other fixed costs', hint:'Software, licences, loan EMI, repairs.', type:'inr', unit:'a month', ex:'30000' }
+  ]},
+  { id:'space', short:'Room', title:'The room', note:'How many orders the space can hold.', fields:[
+    { id:'seats', label:'Seats', hint:'Count them.', type:'num', ex:'40' },
+    { id:'turns', label:'Times each seat fills on a busy day', hint:'Use your best day so far, not a hope.', type:'num', ex:'3' },
+    { id:'guests', label:'Guests per dine-in bill', hint:'POS covers ÷ bills.', type:'num', ex:'2.2' }
+  ]},
+  { id:'customers', short:'Customers', title:'Customers', note:'Read your last 50 Google and Zomato reviews for the two complaint numbers.', fields:[
+    { id:'repeat', label:'First-timers who come back within 30 days', hint:'Phone numbers in POS or loyalty app, or the apps’ repeat-customer figure.', type:'pct', unit:'%', ex:'22' },
+    { id:'prodComplaints', label:'Reviews complaining about food, wait, hygiene or staff', hint:'Share of the last 50 reviews.', type:'pct', unit:'%', ex:'25' },
+    { id:'priceComplaints', label:'Reviews complaining about price or value', hint:'Same 50 reviews.', type:'pct', unit:'%', ex:'35' },
+    { id:'rating', label:'Google rating', hint:'For the record only.', type:'num', optional:true, ex:'4.4' },
+    { id:'views', label:'Google profile views per month', hint:'Business Profile → Performance.', type:'num', optional:true, ex:'8000' },
+    { id:'actions', label:'Calls and direction requests per month', hint:'Business Profile → Performance.', type:'num', optional:true, ex:'400' }
+  ]},
+  { id:'cash', short:'Cash', title:'Cash', note:'How long the outlet can keep going.', fields:[
+    { id:'cash', label:'Cash available for this outlet', hint:'Bank balance plus what the owners will commit.', type:'inr', ex:'500000' },
+    { id:'closeCost', label:'Net cost to close now', hint:'Lease penalty + staff settlement − deposit − equipment resale.', type:'inr', optional:true, ex:'200000' }
+  ]}
+];
+const FIELDS = SECTIONS.flatMap(s => s.fields);
+const THR = [
+  { id:'minRepeat', label:'Repeat rate that counts as working', type:'pct', unit:'%', def:'30' },
+  { id:'maxProd', label:'Most product complaints allowed', type:'pct', unit:'%', def:'30' },
+  { id:'maxPrice', label:'Most price complaints allowed', type:'pct', unit:'%', def:'25' },
+  { id:'gapOK', label:'Largest gap marketing alone can close', type:'num', unit:'× break-even', def:'1.5' },
+  { id:'gapStruct', label:'Gap that means a structural problem', type:'num', unit:'× break-even', def:'3' },
+  { id:'minMonths', label:'Months of cash marketing needs', type:'num', unit:'months', def:'3' }
+];
+const TESTS = [
+  { q:'Does every order make money?', fail:'Each extra order loses money, so more customers mean bigger losses. Fix price, food cost, discounts or commission terms before any campaign.' },
+  { q:'Profitable if customers doubled?', fail:'Even double the customers won’t cover the monthly bills. Rent and staff are the problem, not demand.' },
+  { q:'Can a full outlet break even?', fail:'The room can’t reach break-even even when every seat is full. Growth has to come from delivery or takeaway, or the rent or format has to change.' },
+  { q:'Do first-timers come back?', fail:'People try once and don’t return. Marketing would buy more one-time visits and more bad reviews. Fix the product or experience first.' },
+  { q:'Are product complaints low?', fail:'Complaints are about food, wait or service. Fix operations before paying for reach.' },
+  { q:'Is the price seen as fair?', fail:'Customers don’t think it’s worth the price. Change price, portion or combos. Ads can’t change what people think it’s worth.' },
+  { q:'Is the gap small enough for marketing?', fail:'The gap is too big for marketing alone. It needs a structural change, with marketing on top.', partial:'Marketing can close part of this gap. The rest needs a structural change: a new channel, a tighter menu or lower costs.' },
+  { q:'Is there time for marketing to work?', fail:'Cash runs out before marketing can build up. Decide now: cut costs, change format or close.' }
+];
+const VERDICTS = {
+  orders:{ tone:'bad', stamp:'Not a marketing problem', head:'Marketing can’t fix this', tail:'Every extra order loses money.', next:'Fix price, food cost, discounts or commission terms. Then run this check again.' },
+  costs:{ tone:'bad', stamp:'Not a marketing problem', head:'Marketing can’t fix this', tail:'The monthly bills are too high even with double the customers.', next:'Cut rent or staff cost, or change the format. More promotion will not close this.' },
+  cash:{ tone:'bad', stamp:'Decide now', head:'Not enough cash to wait', tail:'Marketing needs time this outlet doesn’t have.', next:'Decide this week: cut costs, change the format, add cash or close.' },
+  product:{ tone:'warn', stamp:'Fix first', head:'Fix the product first', tail:'Marketing now would bring more one-time visitors and more bad reviews.', next:'Fix what the low reviews complain about, get repeat visits up, then promote.' },
+  price:{ tone:'warn', stamp:'Fix first', head:'Fix price and value first', tail:'Customers don’t think it’s worth what they pay.', next:'Change price, portion or combos. Then market the new offer.' },
+  structural:{ tone:'bad', stamp:'Needs a bigger change', head:'Marketing alone won’t close the gap', tail:'The outlet is too far from break-even.', next:'Plan a structural change first: delivery, a smaller menu, lower costs or a new format.' },
+  dinein:{ tone:'warn', stamp:'Grow outside the room', head:'Dine-in is maxed out', tail:'A full room still can’t break even.', next:'Aim marketing at delivery and takeaway, or cut the cost of the space.' },
+  partial:{ tone:'warn', stamp:'Marketing plus a change', head:'Marketing can help, with a structural change', tail:'The gap is beyond what promotion alone can close.', next:'Pair the campaign with one structural move: delivery, combos or lower costs.' },
+  yes:{ tone:'good', stamp:'Marketing can fix it', head:'Marketing can fix this', tail:'The outlet works. Too few people know about it.', next:'Set the stop rule in the 60-day test, then spend on reach.' }
+};
+const TONE_S = { good:'pass', warn:'partial', bad:'fail' };
+const TRACK = {
+  'on':{ s:'pass', label:'ON TRACK', text:'At or above target.' },
+  'behind':{ s:'partial', label:'BEHIND', text:'Below target. Still inside the 6 weeks.' },
+  'stop-target':{ s:'fail', label:'STOP', text:'Target missed at week 6 or later.' },
+  'stop-cash':{ s:'fail', label:'STOP', text:'The cash limit is used up.' },
+  'no-target':{ s:'', label:'NO TARGET', text:'Set a target above.' }
+};
+const WEEKS = 9;
+
+let state = null, storageOK = true, last = null, lastRes = null;
+
+// ---------- state and storage ----------
+const blankTracker = () => ({ target:'', limit:'', start:'', weeks:Array.from({ length:WEEKS }, () => ({ o:'', p:'' })) });
+const blankState = history => ({ v:2, example:false, step:0, vals:{ days:'30' }, thr:{}, tracker:blankTracker(), history: history || [] });
+const exampleState = history => { const s = blankState(history); s.example = true; FIELDS.forEach(f => s.vals[f.id] = f.ex); return s; };
+const valid = d => !!(d && d.v === 2 && d.vals && typeof d.vals === 'object' && d.tracker && Array.isArray(d.tracker.weeks) && Array.isArray(d.history));
+function normalise(d) {
+  d.thr = d.thr || {};
+  d.step = Number.isInteger(d.step) && d.step >= 0 && d.step < SECTIONS.length ? d.step : 0;
+  d.tracker.weeks = d.tracker.weeks.slice(0, WEEKS).map(w => ({ o: String((w && w.o) || ''), p: String((w && w.p) || '') }));
+  while (d.tracker.weeks.length < WEEKS) d.tracker.weeks.push({ o:'', p:'' });
+  ['target','limit','start'].forEach(k => d.tracker[k] = String(d.tracker[k] || ''));
+  d.history = d.history.filter(h => h && h.id && h.at && h.vals);
+  return d;
+}
+function load() {
+  try {
+    const raw = localStorage.getItem(KEY);
+    if (raw) { const d = JSON.parse(raw); if (valid(d)) return normalise(d); }
+    const old = localStorage.getItem(KEY_OLD);
+    if (old) {
+      const o = JSON.parse(old);
+      if (o && o.vals) {
+        const s = blankState(); s.vals = o.vals; s.thr = o.thr || {}; s.example = !!o.example;
+        if (o.tracker) { s.tracker.target = o.tracker.target || ''; s.tracker.limit = o.tracker.limit || ''; if (Array.isArray(o.tracker.weeks)) s.tracker.weeks = o.tracker.weeks; }
+        return normalise(s);
+      }
+    }
+  } catch (e) { storageOK = false; }
+  return null;
+}
+function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); storageOK = true; } catch (e) { storageOK = false; } }
+
+// ---------- formatting ----------
+const inr = n => { const r = Math.round(n); return (r < 0 ? '−' : '') + '₹' + Math.abs(r).toLocaleString('en-IN'); };
+const one = n => n.toLocaleString('en-IN', { minimumFractionDigits:1, maximumFractionDigits:1 });
+const pct = n => Math.round(n * 100) + '%';
+const dShort = d => d.toLocaleDateString('en-IN', { day:'numeric', month:'short' });
+const dLong = d => d.toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' });
+function parseDate(s) { if (!/^\d{4}-\d{2}-\d{2}$/.test(s || '')) return null; const [y, m, d] = s.split('-').map(Number); const dt = new Date(y, m - 1, d); return isNaN(dt) ? null : dt; }
+const addDays = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x; };
+
+// ---------- reading inputs ----------
+function readNum(raw, allowNeg) {
+  const s = String(raw == null ? '' : raw).trim();
+  if (s === '') return { state:'blank' };
+  const n = Number(s.replace(/[₹,%\s]/g, '').replace('−', '-'));
+  if (!isFinite(n) || (!allowNeg && n < 0)) return { state:'bad', msg:'Enter a number, 0 or more.' };
+  return { state:'ok', n };
+}
+function readField(f, raw) {
+  const r = readNum(raw, false);
+  if (r.state !== 'ok') return r;
+  if (f.type === 'pct' && r.n > 100) return { state:'bad', msg:'Enter a percentage from 0 to 100.' };
+  if (f.id === 'days' && (r.n < 1 || r.n > 31)) return { state:'bad', msg:'Enter days from 1 to 31.' };
+  if (f.id === 'guests' && r.n < 1) return { state:'bad', msg:'Enter 1 or more.' };
+  if (f.id === 'rating' && r.n > 5) return { state:'bad', msg:'Enter a rating from 0 to 5.' };
+  return { state:'ok', value: f.type === 'pct' ? r.n / 100 : r.n };
+}
+function pretty(type, raw, allowNeg) {
+  const r = readNum(raw, allowNeg);
+  if (r.state !== 'ok') return String(raw == null ? '' : raw);
+  if (type === 'inr' || (type === 'num' && Math.abs(r.n) >= 1000)) return r.n.toLocaleString('en-IN', { maximumFractionDigits:2 });
+  return String(raw).trim();
+}
+function collect() {
+  const vals = {}, status = {}; let missing = 0, bad = 0;
+  const del = readField(FIELDS.find(f => f.id === 'delOrders'), state.vals.delOrders);
+  const noDelivery = del.state === 'ok' && del.value === 0;
+  FIELDS.forEach(f => {
+    const r = readField(f, state.vals[f.id]);
+    const notNeeded = f.optional || (f.del && noDelivery);
+    if (r.state === 'ok') { vals[f.id] = r.value; status[f.id] = { s:'ok' }; }
+    else if (r.state === 'bad') { bad++; status[f.id] = { s:'bad', msg:r.msg }; }
+    else if (notNeeded) { vals[f.id] = f.optional ? null : 0; status[f.id] = { s: f.del && noDelivery ? 'off' : 'empty' }; }
+    else { missing++; status[f.id] = { s:'need' }; }
+  });
+  const thr = {};
+  THR.forEach(t => { const r = readField(t, state.thr[t.id]); thr[t.id] = r.state === 'ok' ? r.value : readField(t, t.def).value; });
+  return { vals, thr, status, missing, bad, complete: missing === 0 && bad === 0 };
+}
+
+// ---------- building the page ----------
+function fieldHTML(f, prefix) {
+  const pre = f.type === 'inr' ? '<span class="unit pre">₹</span>' : '';
+  const unit = f.unit || (f.type === 'pct' ? '%' : '');
+  const post = unit ? '<span class="unit">' + unit + '</span>' : '';
+  const hint = f.hint ? '<p class="hint" id="h-' + prefix + f.id + '">' + f.hint + '</p>' : '';
+  return '<div class="field" id="w-' + prefix + f.id + '"><label for="' + prefix + f.id + '">' + f.label + (f.optional ? '<span class="opt">optional</span>' : '') + '</label>' +
+    '<div class="inp">' + pre + '<input id="' + prefix + f.id + '" inputmode="decimal" autocomplete="off" enterkeyhint="next"' + (f.hint ? ' aria-describedby="h-' + prefix + f.id + '"' : '') + '>' + post + '</div>' +
+    hint + '<p class="err" id="e-' + prefix + f.id + '" hidden></p></div>';
+}
+function build() {
+  $('chips').innerHTML = SECTIONS.map((s, i) =>
+    '<button type="button" class="chip" id="chip-' + i + '" data-step="' + i + '"><span class="chip-n" id="chipn-' + i + '">' + (i + 1) + '</span><span>' + s.short + '</span><span class="chip-c" id="chipc-' + i + '"></span></button>').join('');
+  $('form').innerHTML = SECTIONS.map((s, i) =>
+    '<fieldset class="step" id="step-' + i + '" hidden><legend class="sr">' + s.title + '</legend>' +
+    '<div class="step-head"><span class="step-k">Step ' + (i + 1) + ' of ' + SECTIONS.length + '</span><h2 id="sh-' + i + '" tabindex="-1">' + s.title + '</h2><p class="sec-note">' + s.note + '</p></div>' +
+    '<div class="fields two">' + s.fields.map(f => fieldHTML(f, 'f-')).join('') + '</div>' +
+    '<div class="sum" id="sum-' + s.id + '" aria-live="polite"></div></fieldset>').join('');
+  $('thr-fields').innerHTML = THR.map(t => fieldHTML(t, 't-')).join('');
+  $('rule-fields').innerHTML =
+    '<div class="field"><label for="r-start">Start date</label><div class="inp"><input id="r-start" type="date"></div><p class="hint">Week 1 starts on this day.</p></div>' +
+    fieldHTML({ id:'target', label:'Target orders per day by week 6', type:'num', hint:'Leave blank to use break-even.' }, 'r-') +
+    fieldHTML({ id:'limit', label:'Most cash to put into the test', type:'inr', hint:'Money you can afford to lose.' }, 'r-');
+  $('weeks').innerHTML = state.tracker.weeks.map((w, i) =>
+    '<div class="week"><span class="week-n">W' + (i + 1) + '<small id="wk-d-' + i + '"></small></span>' +
+    '<div class="inp"><input id="wk-o-' + i + '" inputmode="decimal" autocomplete="off" aria-label="Week ' + (i + 1) + ' orders per day"></div>' +
+    '<div class="inp"><input id="wk-p-' + i + '" inputmode="text" autocomplete="off" aria-label="Week ' + (i + 1) + ' profit or loss in rupees"></div>' +
+    '<div class="week-s" id="wk-s-' + i + '"></div></div>').join('');
+  $('marks').innerHTML = TESTS.map(() => '<i></i>').join('');
+
+  FIELDS.forEach(f => {
+    const el = $('f-' + f.id);
+    el.addEventListener('input', () => { state.vals[f.id] = el.value; refresh(); });
+    el.addEventListener('blur', () => { el.value = pretty(f.type, el.value, false); state.vals[f.id] = el.value; save(); });
+  });
+  THR.forEach(t => $('t-' + t.id).addEventListener('input', e => { state.thr[t.id] = e.target.value; refresh(); }));
+  $('r-start').addEventListener('input', e => { state.tracker.start = e.target.value; refresh(); });
+  ['target', 'limit'].forEach(k => {
+    const el = $('r-' + k);
+    el.addEventListener('input', () => { state.tracker[k] = el.value; refresh(); });
+    el.addEventListener('blur', () => { el.value = pretty(k === 'limit' ? 'inr' : 'num', el.value, false); state.tracker[k] = el.value; save(); });
+  });
+  state.tracker.weeks.forEach((w, i) => {
+    const o = $('wk-o-' + i), p = $('wk-p-' + i);
+    o.addEventListener('input', () => { state.tracker.weeks[i].o = o.value; refresh(); });
+    p.addEventListener('input', () => { state.tracker.weeks[i].p = p.value; refresh(); });
+    p.addEventListener('blur', () => { p.value = pretty('inr', p.value, true); state.tracker.weeks[i].p = p.value; save(); });
+  });
+}
+function fill() {
+  FIELDS.forEach(f => $('f-' + f.id).value = pretty(f.type, state.vals[f.id] || '', false));
+  THR.forEach(t => { const el = $('t-' + t.id); el.value = state.thr[t.id] || ''; el.placeholder = t.def; });
+  $('r-start').value = state.tracker.start || '';
+  $('r-target').value = state.tracker.target || '';
+  $('r-limit').value = pretty('inr', state.tracker.limit || '', false);
+  state.tracker.weeks.forEach((w, i) => { $('wk-o-' + i).value = w.o || ''; $('wk-p-' + i).value = pretty('inr', w.p || '', true); });
+}
+
+// ---------- steps ----------
+function showStep() {
+  SECTIONS.forEach((s, i) => {
+    $('step-' + i).hidden = i !== state.step;
+    const chip = $('chip-' + i);
+    if (i === state.step) chip.setAttribute('aria-current', 'step'); else chip.removeAttribute('aria-current');
+  });
+  $('btn-back').disabled = state.step === 0;
+  $('btn-next').textContent = state.step < SECTIONS.length - 1 ? 'Next: ' + SECTIONS[state.step + 1].short : 'See the verdict';
+  const chip = $('chip-' + state.step);
+  const box = $('chips');
+  if (chip.offsetLeft < box.scrollLeft || chip.offsetLeft + chip.offsetWidth > box.scrollLeft + box.clientWidth) box.scrollLeft = chip.offsetLeft - 16;
+}
+function goStep(i, focus) {
+  state.step = Math.max(0, Math.min(SECTIONS.length - 1, i));
+  showStep(); save();
+  if (focus) {
+    const y = $('chips').getBoundingClientRect().top + window.scrollY - $('bar').offsetHeight - 10;
+    if (window.scrollY > y) window.scrollTo(0, y);
+    $('sh-' + state.step).focus({ preventScroll:true });
+  }
+}
+function next() { if (state.step < SECTIONS.length - 1) goStep(state.step + 1, true); else location.hash = '#verdict'; }
+
+// ---------- live summaries under each step ----------
+function sums(c, res) {
+  const ok = id => c.status[id] && (c.status[id].s === 'ok' || c.status[id].s === 'off');
+  const v = id => c.vals[id] || 0;
+  const money = n => '<b' + (n < 0 ? ' class="neg"' : '') + '>' + inr(n) + '</b>';
+  const out = {};
+  if (ok('days') && ok('dineOrders') && ok('delOrders')) {
+    let t = '<b>' + one((v('dineOrders') + v('delOrders')) / v('days')) + '</b> orders a day';
+    if (v('delOrders') > 0) t += ' (' + one(v('dineOrders') / v('days')) + ' dine-in, ' + one(v('delOrders') / v('days')) + ' delivery)';
+    t += (ok('dineBill') && ok('delAOV')) ? '. Sales: <b>' + inr(v('dineOrders') * v('dineBill') + v('delOrders') * v('delAOV')) + '</b> a month.' : '.';
+    out.orders = t;
+  }
+  if (['foodPct', 'discPct', 'otherVarPct'].every(ok)) {
+    if (!ok('dineBill')) out.costs = 'Fill in the average bill in step 1 to see what each order leaves.';
+    else {
+      let t = 'Each dine-in order leaves ' + money(v('dineBill') * (1 - v('foodPct') - v('discPct') - v('otherVarPct'))) + ' after food, discounts and other costs';
+      if (v('delOrders') > 0 && ['delAOV', 'commPct', 'pack'].every(ok))
+        t += '. Each delivery order leaves ' + money(v('delAOV') * (1 - v('foodPct') - v('commPct') - v('discPct') - v('otherVarPct')) - v('pack'));
+      out.costs = t + '.';
+    }
+  }
+  const billIds = ['rent', 'salaries', 'utilities', 'marketing', 'otherFixed'];
+  const filled = billIds.filter(id => c.status[id].s === 'ok');
+  if (filled.length) {
+    const tot = filled.reduce((s, id) => s + v(id), 0);
+    out.bills = 'Monthly bills' + (filled.length < billIds.length ? ' so far' : '') + ': <b>' + inr(tot) + '</b>' +
+      (filled.length === billIds.length && ok('days') ? ', about <b>' + inr(tot / v('days')) + '</b> for every day you open.' : '.');
+  }
+  if (['seats', 'turns', 'guests'].every(ok)) {
+    let t = 'The room can serve up to <b>' + one(v('seats') * v('turns') / v('guests')) + '</b> dine-in orders a day';
+    if (ok('days') && ok('dineOrders')) t += '. You average <b>' + one(v('dineOrders') / v('days')) + '</b>';
+    out.space = t + '.';
+  }
+  out.customers = 'To pass: at least <b>' + pct(c.thr.minRepeat) + '</b> come back, product complaints at most <b>' + pct(c.thr.maxProd) +
+    '</b>, price complaints at most <b>' + pct(c.thr.maxPrice) + '</b>. Change these under Pass marks on the Verdict tab.';
+  out.cash = !res ? 'Fill in every step to see how long the cash lasts.'
+    : res.m.runway === null ? 'At these numbers the outlet isn’t losing money.'
+    : 'At a monthly loss of ' + money(res.m.profit) + ', this cash lasts about <b>' + one(res.m.runway) + ' months</b>.';
+  return out;
+}
+
+// ---------- verdict ----------
+function testValue(i, m) {
+  if (i === 0) return inr(m.weakest) + ' left per order on the weaker channel';
+  if (i === 1) return inr(m.profit2x) + ' a month at double the orders';
+  if (i === 2) return inr(m.profitFull) + ' a month with every seat full';
+  if (i === 3) return pct(last.vals.repeat) + ' return (pass mark ' + pct(last.thr.minRepeat) + ')';
+  if (i === 4) return pct(last.vals.prodComplaints) + ' of reviews (limit ' + pct(last.thr.maxProd) + ')';
+  if (i === 5) return pct(last.vals.priceComplaints) + ' of reviews (limit ' + pct(last.thr.maxPrice) + ')';
+  if (i === 6) return m.gap === null ? 'Break-even can’t be reached' : 'Needs ' + one(m.gap) + '× today’s orders';
+  return m.runway === null ? 'Not losing money' : one(m.runway) + ' months of cash (need ' + one(last.thr.minMonths) + ')';
+}
+const moneyLine = (label, n) => '<div class="line"><span>' + label + '</span><span class="lead"></span><b' + (n < 0 ? ' class="neg"' : '') + '>' + inr(n) + '</b></div>';
+const textLine = (label, t) => '<div class="line"><span>' + label + '</span><span class="lead"></span><b>' + t + '</b></div>';
+function meterHTML(m, thr) {
+  if (m.beDay === null) return '<div class="meter" data-tone="bad"><div class="t-title">Orders a day</div><p class="meter-msg">Break-even can’t be reached: on average each order loses money.</p></div>';
+  const now = m.ordersDay, be = m.beDay, max = Math.max(now, be) * 1.15 || 1, diff = be - now;
+  const tone = diff <= 0 ? 'good' : m.gap <= thr.gapOK ? 'warn' : 'bad';
+  const msg = diff > 0 ? 'Needs ' + one(diff) + ' more orders a day (' + one(m.gap) + '× today)' : one(-diff) + ' orders a day above break-even';
+  return '<div class="meter" data-tone="' + tone + '"><div class="t-title">Orders a day</div>' +
+    '<div class="meter-track" role="img" aria-label="' + one(now) + ' orders a day now. Break-even is ' + one(be) + '."><div class="meter-fill" style="width:' + (now / max * 100).toFixed(1) + '%"></div><div class="meter-be" style="left:' + (be / max * 100).toFixed(1) + '%"></div></div>' +
+    '<div class="meter-key"><span><i class="k-now"></i>Now ' + one(now) + '</span><span><i class="k-be"></i>Break-even ' + one(be) + '</span></div>' +
+    '<p class="meter-msg">' + msg + '</p></div>';
+}
+function renderTicket(c, res) {
+  const t = $('ticket');
+  const head = '<div class="t-head"><span>Burgerium · outlet check</span><span>' + dLong(new Date()) + '</span></div>';
+  if (!res) {
+    const miss = FIELDS.filter(f => c.status[f.id].s === 'need' || c.status[f.id].s === 'bad');
+    const first = SECTIONS.findIndex(s => s.fields.some(f => miss.includes(f)));
+    const names = miss.slice(0, 3).map(f => f.label).join(', ') + (miss.length > 3 ? ', and ' + (miss.length - 3) + ' more' : '');
+    t.dataset.tone = 'wait';
+    t.innerHTML = head + '<div class="stamp">Not ready</div><div class="t-verdict">' +
+      (c.missing ? c.missing + ' number' + (c.missing === 1 ? '' : 's') + ' still to fill' : 'Check the numbers marked in red') + '</div>' +
+      '<p class="t-missing">' + names + '.</p><button class="btn" type="button" data-goto="' + Math.max(0, first) + '">Fill these in</button>' +
+      '<hr class="rule"><div class="t-title">The 8 tests</div><ol class="tests">' +
+      TESTS.map((x, i) => '<li><div class="test-row"><span class="test-n">' + (i + 1) + '</span><span class="test-q">' + x.q + '</span><span class="pill">WAIT</span></div></li>').join('') + '</ol>';
+    return;
+  }
+  const V = VERDICTS[res.verdict], m = res.m;
+  t.dataset.tone = V.tone;
+  const fails = res.status.filter(s => s === 'fail').length, parts = res.status.filter(s => s === 'partial').length;
+  let h = head + '<div class="stamp">' + V.stamp + '</div><div class="t-verdict">' + V.head + '</div><p class="t-tail">' + V.tail + '</p>' +
+    '<p class="t-next"><strong>Next:</strong> ' + V.next + '</p>' + (state.example ? '<p class="t-foot">Printed from example numbers, not Burgerium’s.</p>' : '') +
+    '<hr class="rule">' + meterHTML(m, last.thr) +
+    '<hr class="rule"><div class="t-title">The 8 tests · ' + fails + ' failed' + (parts ? ', ' + parts + ' partial' : '') + '</div><ol class="tests">';
+  TESTS.forEach((x, i) => {
+    const s = res.status[i];
+    h += '<li><div class="test-row"><span class="test-n">' + (i + 1) + '</span><span class="test-q">' + x.q + '<small>' + testValue(i, m) + '</small></span>' +
+      '<span class="pill" data-s="' + s + '">' + s.toUpperCase() + '</span></div>' +
+      (s === 'fail' ? '<p class="test-why">' + x.fail + '</p>' : s === 'partial' ? '<p class="test-why" data-s="partial">' + x.partial + '</p>' : '') + '</li>';
+  });
+  h += '</ol><hr class="rule"><div class="t-title">The numbers behind it</div><div class="lines">' +
+    textLine('Orders per day now', one(m.ordersDay)) +
+    textLine('Break-even orders per day', m.beDay === null ? 'Never' : one(m.beDay)) +
+    moneyLine('Monthly sales', m.sales) +
+    moneyLine('Left per dine-in order', m.cDine) +
+    (last.vals.delOrders > 0 ? moneyLine('Left per delivery order', m.cDel) : '') +
+    textLine('Left from each ₹100 of sales', inr(m.margin * 100)) +
+    moneyLine('Monthly bills', m.fixed) +
+    moneyLine('Monthly profit or loss', m.profit) +
+    moneyLine('If orders doubled', m.profit2x) +
+    textLine('Most dine-in orders the room holds a day', one(m.maxDine)) +
+    moneyLine('With every seat full', m.profitFull) +
+    textLine('Months of cash left', m.runway === null ? 'Not losing money' : one(m.runway)) +
+    (m.actionRate !== null ? textLine('Google views that call or ask directions', pct(m.actionRate)) : '') +
+    (last.vals.closeCost != null ? moneyLine('Net cost to close now', last.vals.closeCost) : '') +
+    '</div><p class="t-foot">“Left per order” is the bill minus food, discounts, commission, packaging and other costs that grow with sales. The doubled-orders line assumes the monthly bills stay the same.</p>';
+  t.innerHTML = h;
+}
+function summaryText(c, res) {
+  if (!res) return 'Burgerium outlet check: ' + c.missing + ' numbers still to fill.';
+  const V = VERDICTS[res.verdict], m = res.m;
+  const L = ['BURGERIUM OUTLET CHECK' + (state.example ? ' (EXAMPLE NUMBERS)' : ''), dLong(new Date()), '',
+    'VERDICT: ' + V.head + '. ' + V.tail, 'Next: ' + V.next, ''];
+  TESTS.forEach((x, i) => L.push((i + 1) + '. ' + x.q + ' ' + res.status[i].toUpperCase() + ' (' + testValue(i, m) + ')'));
+  L.push('', 'Orders per day now: ' + one(m.ordersDay), 'Break-even orders per day: ' + (m.beDay === null ? 'never' : one(m.beDay)),
+    'Monthly sales: ' + inr(m.sales), 'Monthly bills: ' + inr(m.fixed), 'Monthly profit or loss: ' + inr(m.profit),
+    'Months of cash left: ' + (m.runway === null ? 'not losing money' : one(m.runway)));
+  return L.join('\n');
+}
+
+// ---------- 60-day test ----------
+function trackerChart(weeks, rows, target) {
+  const pts = weeks.map((w, i) => ({ i, o:w.o, st:rows[i].status })).filter(p => p.o != null);
+  if (!pts.length) return '<p class="small chart-empty">The chart fills in as you add weeks.</p>';
+  const W = 340, H = 170, l = 6, r = 6, t = 22, b = 24, bw = (W - l - r) / WEEKS;
+  const maxV = Math.max(target || 0, ...pts.map(p => p.o)) * 1.15 || 1;
+  const y = v => t + (H - t - b) * (1 - v / maxV);
+  const cls = { on:'b-pass', behind:'b-partial', 'stop-target':'b-fail', 'stop-cash':'b-fail' };
+  let s = '<svg class="chart" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Orders a day by week against the target">';
+  s += '<line class="base" x1="' + l + '" x2="' + (W - r) + '" y1="' + (H - b) + '" y2="' + (H - b) + '"/>';
+  for (let i = 0; i < WEEKS; i++) s += '<text x="' + (l + i * bw + bw / 2).toFixed(1) + '" y="' + (H - 8) + '" text-anchor="middle">W' + (i + 1) + '</text>';
+  pts.forEach(p => {
+    const x = l + p.i * bw + bw * 0.18, w = bw * 0.64, yy = y(p.o);
+    s += '<rect class="' + (cls[p.st] || 'b-none') + '" x="' + x.toFixed(1) + '" y="' + yy.toFixed(1) + '" width="' + w.toFixed(1) + '" height="' + (H - b - yy).toFixed(1) + '" rx="2"><title>Week ' + (p.i + 1) + ': ' + one(p.o) + ' orders a day</title></rect>' +
+      '<text class="val" x="' + (x + w / 2).toFixed(1) + '" y="' + (yy - 5).toFixed(1) + '" text-anchor="middle">' + Math.round(p.o) + '</text>';
+  });
+  if (target) { const ty = y(target); s += '<line class="target" x1="' + l + '" x2="' + (W - r) + '" y1="' + ty.toFixed(1) + '" y2="' + ty.toFixed(1) + '"/><text x="' + (W - r) + '" y="' + (ty - 5).toFixed(1) + '" text-anchor="end">Target ' + one(target) + '</text>'; }
+  return s + '</svg>';
+}
+function renderTracker(res) {
+  const be = res && res.m.beDay !== null ? res.m.beDay : null;
+  const tgt = readNum(state.tracker.target, false), lim = readNum(state.tracker.limit, false);
+  const target = tgt.state === 'ok' && tgt.n > 0 ? tgt.n : be, limit = lim.state === 'ok' ? lim.n : null;
+  const start = parseDate(state.tracker.start);
+  $('r-target').placeholder = be !== null ? one(be) : '';
+  $('rule-facts').innerHTML =
+    '<p>' + (be !== null ? 'Break-even from your numbers: <b>' + one(be) + '</b> orders a day' + (state.example ? ' (example numbers).' : '.') : 'Fill in your numbers to see break-even here, or type a target.') + '</p>' +
+    '<p>' + (start ? 'Week 6 check: <b>' + dLong(addDays(start, 41)) + '</b>. Decision day: <b>' + dLong(addDays(start, 59)) + '</b>.' : 'Pick a start date to see the week 6 check and decision day.') + '</p>';
+  const weeks = state.tracker.weeks.map(w => {
+    const o = readNum(w.o, false), p = readNum(w.p, true);
+    return { o: o.state === 'ok' ? o.n : null, p: p.state === 'ok' ? p.n : null };
+  });
+  const rows = Logic.tracker(weeks, target, limit);
+  let used = 0, any = false;
+  rows.forEach((r, i) => {
+    const T = TRACK[r.status];
+    $('wk-s-' + i).innerHTML = T ? '<span class="pill" data-s="' + T.s + '">' + T.label + '</span><span>' + T.text + '</span>' : '';
+    $('wk-d-' + i).textContent = start ? dShort(addDays(start, 7 * i)) : '';
+    if (weeks[i].p !== null) { used = r.used; any = true; }
+  });
+  $('trk-chart').innerHTML = trackerChart(weeks, rows, target);
+  $('cash-box').innerHTML = !any ? ''
+    : limit !== null ? '<div class="cash"><div class="cash-top"><span>Cash used</span><b>' + inr(used) + ' of ' + inr(limit) + '</b></div><div class="cash-track"><div class="cash-fill" data-over="' + (used > limit ? 1 : 0) + '" style="width:' + Math.min(100, limit > 0 ? used / limit * 100 : 100).toFixed(1) + '%"></div></div></div>'
+    : '<div class="cash"><div class="cash-top"><span>Cash used so far</span><b>' + inr(used) + '</b></div></div>';
+}
+
+// ---------- history ----------
+function histChart(list) {
+  const pts = list.filter(h => typeof h.ordersDay === 'number' && typeof h.beDay === 'number').slice(-12);
+  if (pts.length < 2) return '';
+  const W = 340, H = 150, l = 10, r = 64, t = 14, b = 22;
+  const maxV = Math.max(...pts.map(p => Math.max(p.ordersDay, p.beDay))) * 1.15 || 1;
+  const x = i => l + (W - l - r) * i / (pts.length - 1), y = v => t + (H - t - b) * (1 - v / maxV);
+  const line = k => pts.map((p, i) => x(i).toFixed(1) + ',' + y(p[k]).toFixed(1)).join(' ');
+  const lastP = pts[pts.length - 1], xe = x(pts.length - 1) + 8;
+  let yn = y(lastP.ordersDay) + 4, yb = y(lastP.beDay) + 4;
+  if (Math.abs(yn - yb) < 13) { if (yn <= yb) { yn -= 7; yb += 7; } else { yn += 7; yb -= 7; } }
+  let s = '<svg class="chart" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Orders a day against break-even across saved checks">' +
+    '<line class="base" x1="' + l + '" x2="' + (W - r) + '" y1="' + (H - b) + '" y2="' + (H - b) + '"/>' +
+    '<polyline class="l-be" points="' + line('beDay') + '"/><polyline class="l-now" points="' + line('ordersDay') + '"/>';
+  pts.forEach((p, i) => s += '<circle class="p-now" cx="' + x(i).toFixed(1) + '" cy="' + y(p.ordersDay).toFixed(1) + '" r="3.5"><title>' + dLong(new Date(p.at)) + ': ' + one(p.ordersDay) + ' a day, break-even ' + one(p.beDay) + '</title></circle>');
+  s += '<text class="val" x="' + xe.toFixed(1) + '" y="' + yn.toFixed(1) + '">' + one(lastP.ordersDay) + '</text>' +
+    '<text x="' + xe.toFixed(1) + '" y="' + yb.toFixed(1) + '">' + one(lastP.beDay) + ' BE</text>' +
+    '<text x="' + l + '" y="' + (H - 6) + '">' + dShort(new Date(pts[0].at)) + '</text>' +
+    '<text x="' + (W - r) + '" y="' + (H - 6) + '" text-anchor="end">' + dShort(new Date(lastP.at)) + '</text></svg>' +
+    '<div class="legend"><span><i></i>Orders a day</span><span><i class="dash"></i>Break-even (BE)</span></div>';
+  return s;
+}
+function renderHistory() {
+  const list = state.history.slice().sort((a, b) => a.at < b.at ? -1 : 1);
+  $('hist-chart').innerHTML = histChart(list);
+  $('hist').innerHTML = !list.length
+    ? '<li class="small chart-empty">No saved checks yet. Fill in your numbers, open the Verdict tab and tap Save this check.</li>'
+    : list.slice().reverse().map(h => {
+        const V = VERDICTS[h.verdict] || { head:'Saved check', tone:'' };
+        const nums = (typeof h.ordersDay === 'number' ? one(h.ordersDay) + ' a day' : '') +
+          (typeof h.beDay === 'number' ? ' · break-even ' + one(h.beDay) : '') +
+          (typeof h.profit === 'number' ? ' · ' + inr(h.profit) + ' a month' : '');
+        return '<li class="h-item"><div class="h-top"><span>' + dLong(new Date(h.at)) + (h.example ? ' · example' : '') + '</span>' +
+          '<span class="pill" data-s="' + (TONE_S[V.tone] || '') + '">' + (typeof h.fails === 'number' ? h.fails + ' FAILED' : 'SAVED') + '</span></div>' +
+          '<div class="h-head">' + V.head + '</div><div class="h-nums">' + nums + '</div>' +
+          '<div class="h-acts"><button class="btn ghost" type="button" data-load="' + h.id + '">Load these numbers</button>' +
+          '<button class="btn ghost danger" type="button" data-del="' + h.id + '">Delete</button></div></li>';
+      }).join('');
+}
+
+// ---------- refresh ----------
+function refresh() {
+  const c = collect();
+  last = c;
+  FIELDS.forEach(f => {
+    const st = c.status[f.id], e = $('e-f-' + f.id);
+    $('w-f-' + f.id).className = 'field ' + (st.s === 'empty' ? '' : st.s);
+    e.hidden = st.s !== 'bad'; e.textContent = st.msg || '';
+  });
+  SECTIONS.forEach((s, i) => {
+    const req = s.fields.filter(f => !f.optional && c.status[f.id].s !== 'off');
+    const done = req.filter(f => c.status[f.id].s === 'ok').length;
+    const bad = s.fields.some(f => c.status[f.id].s === 'bad');
+    const all = done === req.length;
+    $('chip-' + i).dataset.s = bad ? 'bad' : all ? 'done' : done ? 'part' : '';
+    $('chipn-' + i).textContent = bad ? '!' : all ? '✓' : String(i + 1);
+    $('chipc-' + i).textContent = all ? '' : done + '/' + req.length;
+  });
+  const res = c.complete ? Logic.compute(c.vals, c.thr) : null;
+  lastRes = res;
+  const S = sums(c, res);
+  SECTIONS.forEach(s => $('sum-' + s.id).innerHTML = S[s.id] || '');
+  const bar = $('bar');
+  if (res) {
+    const V = VERDICTS[res.verdict];
+    bar.dataset.tone = V.tone; $('bar-head').textContent = V.head; $('bar-tail').textContent = V.tail;
+  } else {
+    bar.dataset.tone = 'wait';
+    $('bar-head').textContent = c.missing ? c.missing + ' number' + (c.missing === 1 ? '' : 's') + ' to go' : 'Check the red fields';
+    $('bar-tail').textContent = 'The verdict appears when every required number is in.';
+  }
+  Array.from($('marks').children).forEach((el, i) => el.dataset.s = res ? res.status[i] : '');
+  renderTicket(c, res);
+  renderTracker(res);
+  $('example-note').hidden = !state.example;
+  $('btn-save').disabled = !res;
+  save();
+  $('save-note').textContent = storageOK
+    ? 'Saved on this device only. Nothing is sent anywhere, and nobody else who opens this page sees your numbers.'
+    : 'This browser won’t save the numbers. They stay until you close the page. Use Copy summary on the Verdict tab to keep a record.';
+}
+
+// ---------- actions ----------
+let toastTimer = null;
+function toast(msg) { const t = $('toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 2600); }
+function twoStep(btn, action, armedText) {
+  const label = btn.textContent; let armed = false, timer = null;
+  btn.addEventListener('click', () => {
+    if (!armed) { armed = true; btn.textContent = armedText || 'Tap again to confirm'; timer = setTimeout(() => { armed = false; btn.textContent = label; }, 4000); return; }
+    clearTimeout(timer); armed = false; btn.textContent = label; action();
+  });
+}
+function replaceState(s) { state = normalise(s); fill(); showStep(); refresh(); renderHistory(); }
+function download(name, text) {
+  const url = URL.createObjectURL(new Blob([text], { type:'application/json' }));
+  const a = document.createElement('a'); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1500);
+}
+
+const VIEWS = ['numbers', 'verdict', 'tracker', 'history'];
+function route() {
+  const h = location.hash.replace('#', ''), v = VIEWS.includes(h) ? h : 'numbers';
+  VIEWS.forEach(n => {
+    $('view-' + n).hidden = n !== v;
+    if (n === v) $('tab-' + n).setAttribute('aria-current', 'page'); else $('tab-' + n).removeAttribute('aria-current');
+  });
+}
+
+function wire() {
+  window.addEventListener('hashchange', () => { route(); const y = $('bar').offsetTop; if (window.scrollY > y) window.scrollTo(0, y); });
+  $('chips').addEventListener('click', e => { const b = e.target.closest('[data-step]'); if (b) goStep(Number(b.dataset.step), true); });
+  $('btn-back').addEventListener('click', () => goStep(state.step - 1, true));
+  $('btn-next').addEventListener('click', next);
+  $('form').addEventListener('submit', e => { e.preventDefault(); next(); });
+  $('form').addEventListener('keydown', e => {
+    if (e.key !== 'Enter' || e.target.tagName !== 'INPUT') return;
+    e.preventDefault();
+    const inputs = Array.from($('step-' + state.step).querySelectorAll('input'));
+    const i = inputs.indexOf(e.target);
+    if (i >= 0 && i < inputs.length - 1) inputs[i + 1].focus(); else next();
+  });
+  $('ticket').addEventListener('click', e => { const b = e.target.closest('[data-goto]'); if (b) { location.hash = '#numbers'; route(); goStep(Number(b.dataset.goto), true); } });
+  $('btn-start').addEventListener('click', () => { replaceState(blankState(state.history)); $('f-dineOrders').focus(); });
+  $('btn-thr').addEventListener('click', () => { state.thr = {}; fill(); refresh(); });
+  $('btn-save').addEventListener('click', () => {
+    if (!lastRes) { toast('Fill in every number first.'); return; }
+    const m = lastRes.m;
+    state.history.push({ id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), at: new Date().toISOString(), example: state.example,
+      vals: Object.assign({}, state.vals), thr: Object.assign({}, state.thr), verdict: lastRes.verdict,
+      fails: lastRes.status.filter(s => s === 'fail').length, ordersDay: m.ordersDay, beDay: m.beDay, profit: m.profit });
+    save(); renderHistory(); toast('Saved to History');
+  });
+  $('btn-copy').addEventListener('click', () => {
+    const text = summaryText(last, lastRes), btn = $('btn-copy'), fb = $('copy-fallback');
+    const done = () => { btn.textContent = 'Copied'; setTimeout(() => btn.textContent = 'Copy summary', 2000); };
+    const manual = () => { fb.hidden = false; fb.value = text; fb.focus(); fb.select(); btn.textContent = 'Select the text below and copy'; };
+    try { navigator.clipboard.writeText(text).then(done, manual); } catch (e) { manual(); }
+  });
+  if (!framed && navigator.share) {
+    $('btn-share').hidden = false;
+    $('btn-share').addEventListener('click', () => { navigator.share({ title:'Burgerium outlet check', text: summaryText(last, lastRes) }).catch(() => {}); });
+  }
+  if (!framed) { $('btn-print').hidden = false; $('btn-print').addEventListener('click', () => window.print()); }
+
+  $('hist').addEventListener('click', e => {
+    const lb = e.target.closest('[data-load]'), db = e.target.closest('[data-del]');
+    if (lb) {
+      const h = state.history.find(x => x.id === lb.dataset.load); if (!h) return;
+      state.vals = Object.assign({}, h.vals); state.thr = Object.assign({}, h.thr || {}); state.example = !!h.example;
+      fill(); refresh(); location.hash = '#verdict'; toast('Loaded the check from ' + dLong(new Date(h.at)));
+    } else if (db) {
+      if (db.dataset.armed !== '1') { db.dataset.armed = '1'; db.textContent = 'Tap again to delete'; setTimeout(() => { if (db.isConnected) { db.dataset.armed = ''; db.textContent = 'Delete'; } }, 4000); return; }
+      state.history = state.history.filter(x => x.id !== db.dataset.del); save(); renderHistory(); toast('Check deleted');
+    }
+  });
+  if (framed) {
+    $('backup-row').querySelector('#btn-backup').hidden = true;
+    $('data-note').textContent = 'Numbers are saved in this browser only. In this preview you can restore a backup; downloading one, sharing and printing work once the app is on its own website.';
+  } else {
+    $('data-note').textContent = 'Numbers are saved in this browser only. Clearing browser data wipes them, so download a backup now and then.';
+    $('btn-backup').addEventListener('click', () => { download('burgerium-outlet-check-' + new Date().toISOString().slice(0, 10) + '.json', JSON.stringify(state, null, 2)); toast('Backup downloaded'); });
+  }
+  $('file-restore').addEventListener('change', async e => {
+    const f = e.target.files && e.target.files[0]; e.target.value = '';
+    if (!f) return;
+    try { const d = JSON.parse(await f.text()); if (!valid(d)) throw new Error('shape'); replaceState(d); toast('Backup restored'); }
+    catch (err) { toast('That file isn’t a backup from this app.'); }
+  });
+  twoStep($('btn-clear'), () => { replaceState(blankState(state.history)); toast('Numbers cleared. Saved checks are kept.'); });
+  twoStep($('btn-example'), () => { replaceState(exampleState(state.history)); toast('Example numbers loaded'); });
+
+  let installEvt = null;
+  window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); installEvt = e; $('install-box').hidden = false; });
+  $('btn-install').addEventListener('click', async () => { if (!installEvt) return; installEvt.prompt(); try { await installEvt.userChoice; } catch (e) {} installEvt = null; $('install-box').hidden = true; });
+  const standalone = (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone;
+  if (/iphone|ipad|ipod/i.test(navigator.userAgent) && !standalone && !framed) $('ios-hint').hidden = false;
+  if (!framed && 'serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
+}
+
+function start(data) {
+  state = valid(data) ? normalise(data) : (load() || exampleState());
+  build(); fill(); route(); showStep(); refresh(); renderHistory(); wire();
+  if (window.claude && window.claude.hot && window.claude.hot.snapshot) window.claude.hot.snapshot(() => state);
+}
+const hot = window.claude && window.claude.hot;
+if (hot && hot.ready) hot.ready(start); else start((hot && hot.data) || {});
+})();
+</script>
+</body>
+</html>
