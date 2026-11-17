@@ -1,12 +1,12 @@
 {
   "name": "Burgerium Outlet Check",
   "short_name": "Outlet Check",
-  "description": "Eight tests that show whether marketing can fix the outlet.",
+  "description": "Eight quick checks that show what this outlet needs next.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#eceff2",
-  "theme_color": "#15202b",
+  "background_color": "#fbfaf7",
+  "theme_color": "#fbfaf7",
   "icons": [
     { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
     { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },

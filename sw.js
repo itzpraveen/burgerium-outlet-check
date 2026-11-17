@@ -1,5 +1,5 @@
 // Raise this number whenever you upload a new index.html, so installed phones fetch it.
-const CACHE = 'outlet-check-v1';
+const CACHE = 'outlet-check-v2';
 const CORE = ['./', './index.html', './manifest.json', './icon.svg', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', e => {

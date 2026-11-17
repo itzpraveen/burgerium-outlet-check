@@ -4,10 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Burgerium Outlet Check</title>
-<meta name="description" content="Eight tests that show whether marketing can fix a restaurant outlet, or something else has to change first.">
+<meta name="description" content="Eight quick checks that show where time and money will help a restaurant outlet most right now.">
 <meta name="robots" content="noindex, nofollow">
-<meta name="theme-color" content="#eceff2" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#0f141a" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbfaf7">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Outlet Check">
@@ -17,28 +16,15 @@
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  /* Layout: one phone-width column. A verdict strip stays on top; numbers go in six short steps; the verdict prints as a till receipt. */
-  --bg:#eceff2; --surface:#ffffff; --ink:#15202b; --muted:#5a6673; --line:#d3d9e0;
-  --accent:#f2b705; --accent-soft:#fdf3cf; --accent-ink:#6b4f00;
-  --good:#1c7a4b; --good-soft:#dff3e8; --warn:#a86200; --warn-soft:#fbecd3; --bad:#b3261e; --bad-soft:#fbe1df;
+  /* Light only. One phone-width column: a status strip stays on top, numbers go in six short steps, the result prints as a till slip.
+     --bg is the page, --surface the white cards, --well the tint for insets inside cards (summaries, meters, step numbers). */
+  --bg:#fbfaf7; --surface:#ffffff; --well:#f4f1ea; --ink:#1f1b16; --muted:#6b645a; --line:#e6e0d5; --field:#cdc5b6;
+  --accent:#f2b705; --accent-strong:#d29e00; --accent-soft:#fff4c8; --accent-ink:#6a4d00;
+  --good:#276b40; --good-soft:#e3f1e7; --warn:#a35f00; --warn-soft:#fcefd5; --bad:#b8352a; --bad-soft:#fbe5e1;
   --display:"Bricolage Grotesque","Arial Narrow",system-ui,sans-serif;
   --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
   --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
   color-scheme:light;
-}
-@media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]){
-    --bg:#0f141a; --surface:#182029; --ink:#e9eef3; --muted:#9ba7b3; --line:#2b3642;
-    --accent:#f2b705; --accent-soft:#3a3110; --accent-ink:#f5cf55;
-    --good:#62cf97; --good-soft:#143525; --warn:#f0b259; --warn-soft:#3a2b10; --bad:#ff8f86; --bad-soft:#3d1a18;
-    color-scheme:dark;
-  }
-}
-:root[data-theme="dark"]{
-  --bg:#0f141a; --surface:#182029; --ink:#e9eef3; --muted:#9ba7b3; --line:#2b3642;
-  --accent:#f2b705; --accent-soft:#3a3110; --accent-ink:#f5cf55;
-  --good:#62cf97; --good-soft:#143525; --warn:#f0b259; --warn-soft:#3a2b10; --bad:#ff8f86; --bad-soft:#3d1a18;
-  color-scheme:dark;
 }
 *{box-sizing:border-box}
 [hidden]{display:none !important}
@@ -54,14 +40,14 @@ button,input{font:inherit;color:inherit}
 .small{font-size:13.5px;color:var(--muted)}
 
 /* Header */
-.top{padding-block:22px 14px}
-.brand{display:flex;align-items:center;gap:8px}
-.logo{width:26px;height:26px;flex:none}
-.logo .bun{fill:var(--accent)} .logo .patty{fill:var(--ink)} .logo .seed{fill:var(--bg)}
-.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-.top h1{font-size:clamp(28px,7.6vw,40px);line-height:1.04;font-weight:800;letter-spacing:-.02em;margin:10px 0 8px}
-.top h1 mark{background:linear-gradient(transparent 58%,var(--accent) 58%);color:inherit;padding:0 2px}
-.lede{color:var(--muted);max-width:56ch;font-size:15px}
+.top{padding-block:24px 18px}
+.brand{display:flex;align-items:center;gap:10px}
+.logo{width:30px;height:30px;flex:none}
+.logo .bun{fill:var(--accent)} .logo .patty{fill:var(--ink)} .logo .seed{fill:var(--surface)}
+.wordmark{font-family:var(--display);font-weight:700;font-size:17px;letter-spacing:-.01em}
+.wordmark span{font-weight:500;color:var(--muted)}
+.top h1{font-size:clamp(30px,8vw,42px);line-height:1.05;font-weight:800;letter-spacing:-.025em;margin:14px 0 10px}
+.lede{color:var(--muted);max-width:52ch;font-size:15.5px}
 
 /* Sticky verdict strip */
 .bar{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
@@ -71,7 +57,7 @@ button,input{font:inherit;color:inherit}
 .bar[data-tone="warn"] .dot{background:var(--warn)}
 .bar[data-tone="bad"] .dot{background:var(--bad)}
 .bar-text{flex:1;min-width:0;line-height:1.25}
-.bar-text strong{display:block;font-family:var(--display);font-weight:700;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar-text strong{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;font-family:var(--display);font-weight:700;font-size:16px;line-height:1.2}
 .bar-text span{display:block;font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 @media (max-width:519px){.bar-text span{display:none}}
 .marks{display:flex;gap:3px;flex:none}
@@ -87,8 +73,9 @@ main{padding-block:16px 72px}
 .view{display:flex;flex-direction:column;gap:16px}
 
 /* Buttons and notices */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;border:1px solid var(--ink);background:var(--ink);color:var(--bg);border-radius:8px;padding:10px 16px;font-family:var(--body);font-weight:600;font-size:15px;line-height:1.2;cursor:pointer;text-decoration:none}
-.btn.ghost{background:var(--surface);color:var(--ink);border-color:var(--line)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:46px;border:1px solid var(--accent-strong);background:var(--accent);color:var(--ink);border-radius:10px;padding:10px 18px;font-family:var(--body);font-weight:600;font-size:15px;line-height:1.2;cursor:pointer;text-decoration:none;box-shadow:inset 0 -2px 0 rgba(0,0,0,.08)}
+.btn:active{box-shadow:none;transform:translateY(1px)}
+.btn.ghost{background:var(--surface);color:var(--ink);border-color:var(--field);box-shadow:none}
 .btn.danger{color:var(--bad)}
 .btn:disabled{opacity:.4;cursor:default}
 .btn-row{display:flex;flex-wrap:wrap;gap:10px}
@@ -99,35 +86,37 @@ main{padding-block:16px 72px}
 /* Step chips */
 .chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin-inline:-16px;padding:2px 16px}
 .chips::-webkit-scrollbar{display:none}
-.chip{flex:none;display:flex;align-items:center;gap:7px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 12px 5px 5px;cursor:pointer;font-size:14px;font-weight:500;color:var(--muted)}
-.chip-n{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-family:var(--mono);font-size:12px;font-weight:600;background:var(--bg);color:var(--muted)}
+@media (min-width:712px){.chips{gap:4px;margin-inline:-3px;padding-inline:3px} .chips .chip{padding-right:12px}}
+.chip{flex:none;display:flex;align-items:center;gap:8px;min-height:40px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 14px 5px 5px;cursor:pointer;font-size:14px;font-weight:500;color:var(--muted)}
+.chip-n{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-family:var(--mono);font-size:12px;font-weight:600;background:var(--well);color:var(--muted)}
 .chip-c{font-family:var(--mono);font-size:11.5px;color:var(--muted)}
 .chip[data-s="done"] .chip-n{background:var(--good);color:var(--surface)}
 .chip[data-s="bad"] .chip-n{background:var(--bad);color:var(--surface)}
 .chip[aria-current="step"]{border-color:var(--ink);color:var(--ink);background:var(--accent-soft)}
 
 /* Step card and fields */
-.step{border:1px solid var(--line);background:var(--surface);border-radius:14px;margin:0;padding:16px 16px 18px;min-width:0}
-.step-head{display:flex;flex-direction:column;gap:2px;margin-bottom:14px}
-.step-k{font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.step{border:1px solid var(--line);background:var(--surface);border-radius:16px;margin:0;padding:18px 16px 20px;min-width:0}
+.step-head{display:flex;flex-direction:column;gap:2px;margin-bottom:16px}
+.step-k{font-size:13px;font-weight:500;color:var(--muted)}
 .step-head h2{font-size:22px;font-weight:700;outline:none}
 .sec-note{font-size:14px;color:var(--muted)}
 .fields{display:flex;flex-direction:column;gap:14px}
-@media (min-width:560px){.fields.two{display:grid;grid-template-columns:1fr 1fr;gap:14px 16px}}
+@media (min-width:560px){.fields.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 18px}}
+.field{min-width:0}
 .field label{display:block;font-weight:500;font-size:15px;line-height:1.3;margin-bottom:6px}
-.opt{font-family:var(--mono);font-size:11px;color:var(--muted);font-weight:400;margin-left:6px}
-.inp{display:flex;align-items:stretch;border:1px solid var(--line);border-left-width:4px;border-radius:8px;background:var(--bg);overflow:hidden}
+.opt{font-size:12.5px;color:var(--muted);font-weight:400;margin-left:6px}
+.inp{display:flex;align-items:stretch;border:1px solid var(--field);border-left-width:4px;border-radius:10px;background:var(--surface);overflow:hidden}
 .field.need .inp{border-left-color:var(--accent)}
 .field.ok .inp{border-left-color:var(--good)}
 .field.bad .inp{border-color:var(--bad)}
 .inp:focus-within{outline:2px solid var(--ink);outline-offset:1px}
-.inp input{flex:1;min-width:0;border:0;background:transparent;padding:11px 10px;font-family:var(--mono);font-size:16px;font-variant-numeric:tabular-nums;outline:none}
+.inp input{flex:1 1 auto;width:0;min-width:0;border:0;background:transparent;padding:11px 10px;font-family:var(--mono);font-size:16px;font-variant-numeric:tabular-nums;outline:none}
 .unit{display:flex;align-items:center;padding:0 10px;font-family:var(--mono);font-size:13px;color:var(--muted);white-space:nowrap}
 .unit.pre{padding-right:0}
 .hint{font-size:13px;color:var(--muted);margin-top:4px}
 .err{font-size:13px;color:var(--bad);margin-top:4px;font-weight:500}
 .field.off{opacity:.5}
-.sum{margin-top:16px;padding:12px 14px;border-radius:10px;background:var(--bg);border-left:4px solid var(--accent);font-size:14.5px}
+.sum{margin-top:18px;padding:12px 14px;border-radius:10px;background:var(--well);border-left:4px solid var(--accent);font-size:14.5px}
 .sum:empty{display:none}
 .sum b{font-family:var(--mono);font-weight:600;font-variant-numeric:tabular-nums}
 .neg{color:var(--bad)}
@@ -135,23 +124,23 @@ main{padding-block:16px 72px}
 .step-nav #btn-next{flex:1}
 
 /* Receipt */
-.ticket{position:relative;background:var(--surface);margin:8px 0;padding:22px 18px 20px;font-family:var(--mono);font-size:13.5px;font-variant-numeric:tabular-nums}
+.ticket{position:relative;background:var(--surface);margin:10px 0;padding:22px 18px 20px;font-family:var(--mono);font-size:13.5px;font-variant-numeric:tabular-nums;filter:drop-shadow(0 1px 1px rgba(70,50,10,.12)) drop-shadow(0 10px 18px rgba(70,50,10,.08))}
 .ticket::before,.ticket::after{content:"";position:absolute;left:0;right:0;height:6px;background-size:12px 6px;background-repeat:repeat-x}
 .ticket::before{top:-6px;background-image:radial-gradient(circle at 6px 6px,var(--surface) 5.5px,transparent 6px)}
 .ticket::after{bottom:-6px;background-image:radial-gradient(circle at 6px 0,var(--surface) 5.5px,transparent 6px)}
-.t-head{display:flex;justify-content:space-between;gap:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-size:12px}
+.t-head{display:flex;justify-content:space-between;gap:10px;color:var(--muted);font-size:12.5px}
 .stamp{display:inline-block;margin:16px 0 10px;padding:5px 10px;border:2px solid currentColor;border-radius:4px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;font-size:12px;transform:rotate(-2deg);color:var(--muted)}
 .ticket[data-tone="good"] .stamp{color:var(--good)}
 .ticket[data-tone="warn"] .stamp{color:var(--warn)}
 .ticket[data-tone="bad"] .stamp{color:var(--bad)}
 .t-verdict{font-family:var(--display);font-weight:800;font-size:clamp(24px,7vw,32px);line-height:1.08;letter-spacing:-.01em}
 .t-tail{font-family:var(--body);font-size:15px;margin-top:6px}
-.t-next{font-family:var(--body);font-size:15px;margin-top:12px;padding:10px 12px;border-left:4px solid var(--accent);background:var(--bg)}
+.t-next{font-family:var(--body);font-size:15px;margin-top:14px;padding:10px 12px;border-left:4px solid var(--accent);border-radius:0 8px 8px 0;background:var(--accent-soft)}
 .t-missing{font-family:var(--body);font-size:14.5px;margin-top:8px}
 .t-missing + .btn{margin-top:12px}
 .rule{border:0;border-top:1px dashed var(--line);margin:18px 0 14px}
-.t-title{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:8px}
-.meter-track{position:relative;height:14px;border-radius:7px;background:var(--bg)}
+.t-title{font-family:var(--body);font-size:14px;font-weight:600;color:var(--ink);margin-bottom:10px}
+.meter-track{position:relative;height:14px;border-radius:7px;background:var(--well)}
 .meter-fill{position:absolute;left:0;top:0;bottom:0;border-radius:7px;background:var(--warn)}
 .meter[data-tone="good"] .meter-fill,.meter[data-tone="good"] .k-now{background:var(--good)}
 .meter[data-tone="bad"] .meter-fill,.meter[data-tone="bad"] .k-now{background:var(--bad)}
@@ -166,7 +155,7 @@ main{padding-block:16px 72px}
 .test-n{flex:none;width:18px;color:var(--muted)}
 .test-q{flex:1;min-width:0;font-family:var(--body);font-size:15px;font-weight:500}
 .test-q small{display:block;font-family:var(--mono);font-weight:400;font-size:12.5px;color:var(--muted)}
-.pill{flex:none;font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.06em;padding:3px 7px;border-radius:4px;background:var(--line);color:var(--muted);white-space:nowrap}
+.pill{flex:none;font-family:var(--body);font-size:12.5px;font-weight:600;line-height:1.3;padding:3px 9px;border-radius:999px;background:var(--well);color:var(--muted);white-space:nowrap}
 .pill[data-s="pass"]{background:var(--good-soft);color:var(--good)}
 .pill[data-s="partial"]{background:var(--warn-soft);color:var(--warn)}
 .pill[data-s="fail"]{background:var(--bad-soft);color:var(--bad)}
@@ -203,9 +192,9 @@ details.card .fields{margin-top:12px}
 .legend i{display:inline-block;width:18px;height:0;border-top:2.5px solid var(--ink);margin-right:6px;vertical-align:middle}
 .legend i.dash{border-top:1.5px dashed var(--muted)}
 .chart-empty{margin-top:12px;padding:14px;border:1px dashed var(--line);border-radius:10px;text-align:center}
-.col-head{display:grid;grid-template-columns:62px 1fr 1fr;gap:8px;font-size:12px;color:var(--muted);margin-top:16px}
+.col-head{display:grid;grid-template-columns:62px repeat(2,minmax(0,1fr));gap:8px;font-size:12px;color:var(--muted);margin-top:16px}
 .weeks{display:flex;flex-direction:column;gap:10px;margin-top:8px}
-.week{display:grid;grid-template-columns:62px 1fr 1fr;gap:6px 8px;align-items:center;padding-top:10px;border-top:1px dashed var(--line)}
+.week{display:grid;grid-template-columns:62px repeat(2,minmax(0,1fr));gap:6px 8px;align-items:center;padding-top:10px;border-top:1px dashed var(--line)}
 .week:first-child{border-top:0;padding-top:0}
 .week-n{font-family:var(--mono);font-size:13px;line-height:1.25}
 .week-n small{display:block;font-size:11px;color:var(--muted)}
@@ -215,12 +204,12 @@ details.card .fields{margin-top:12px}
 .cash{margin-top:16px}
 .cash-top{display:flex;justify-content:space-between;gap:10px;font-size:14px;margin-bottom:6px}
 .cash-top b{font-family:var(--mono);font-weight:600}
-.cash-track{height:10px;border-radius:5px;background:var(--bg);overflow:hidden}
+.cash-track{height:10px;border-radius:5px;background:var(--well);overflow:hidden}
 .cash-fill{height:100%;background:var(--warn)}
 .cash-fill[data-over="1"]{background:var(--bad)}
 .hist{list-style:none;margin:14px 0 0;padding:0;display:flex;flex-direction:column;gap:10px}
 .h-item{border:1px solid var(--line);border-radius:10px;padding:12px}
-.h-top{display:flex;justify-content:space-between;align-items:center;gap:10px;font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+.h-top{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:13px;color:var(--muted)}
 .h-head{font-family:var(--display);font-weight:700;font-size:17px;margin-top:4px}
 .h-nums{font-family:var(--mono);font-size:12.5px;margin-top:2px;font-variant-numeric:tabular-nums}
 .h-acts{display:flex;gap:8px;margin-top:10px}
@@ -228,7 +217,7 @@ details.card .fields{margin-top:12px}
 .panel .btn-row{margin-top:12px}
 
 /* Toast */
-.toast{position:fixed;left:50%;bottom:20px;transform:translate(-50%,16px);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:999px;font-size:14px;font-weight:500;opacity:0;pointer-events:none;max-width:calc(100% - 32px);z-index:20;text-align:center}
+.toast{position:fixed;left:50%;bottom:20px;transform:translate(-50%,16px);background:var(--ink);color:var(--surface);padding:10px 16px;border-radius:999px;font-size:14px;font-weight:500;opacity:0;pointer-events:none;max-width:calc(100% - 32px);z-index:20;text-align:center}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 @media (prefers-reduced-motion:no-preference){
   .toast{transition:opacity .2s ease,transform .2s ease}
@@ -239,7 +228,7 @@ details.card .fields{margin-top:12px}
   body{background:#fff}
   .top,.bar,.btn-row,details.card,#copy-fallback,.toast,#view-numbers,#view-tracker,#view-history{display:none !important}
   #view-verdict{display:block !important}
-  .ticket{margin:0;padding:0}
+  .ticket{margin:0;padding:0;filter:none}
   .ticket::before,.ticket::after{display:none}
 }
 </style>
@@ -248,10 +237,10 @@ details.card .fields{margin-top:12px}
 <header class="wrap top">
   <div class="brand">
     <svg class="logo" viewBox="0 0 48 48" aria-hidden="true"><path class="bun" d="M7 23a17 13 0 0 1 34 0z"/><circle class="seed" cx="18" cy="16" r="1.4"/><circle class="seed" cx="25" cy="13" r="1.4"/><circle class="seed" cx="31" cy="17" r="1.4"/><rect class="patty" x="6" y="25.5" width="36" height="6" rx="3"/><rect class="bun" x="7" y="33.5" width="34" height="7" rx="3.5"/></svg>
-    <span class="eyebrow">Burgerium · Outlet check</span>
+    <span class="wordmark">Burgerium <span>Outlet Check</span></span>
   </div>
-  <h1>Can <mark>marketing</mark> fix this outlet?</h1>
-  <p class="lede">Enter your averages from the last three months. Eight tests show whether promotion is the fix, or something else has to change first.</p>
+  <h1>What does this outlet need next?</h1>
+  <p class="lede">Add your averages from the last three months. Eight quick checks show where time and money will help most right now, whether that’s marketing, pricing, the guest experience or costs.</p>
 </header>
 
 <div class="bar" id="bar" data-tone="wait">
@@ -263,7 +252,7 @@ details.card .fields{margin-top:12px}
     </div>
     <nav class="tabs" aria-label="Sections">
       <a href="#numbers" id="tab-numbers">Numbers</a>
-      <a href="#verdict" id="tab-verdict">Verdict</a>
+      <a href="#verdict" id="tab-verdict">Result</a>
       <a href="#tracker" id="tab-tracker">60 days</a>
       <a href="#history" id="tab-history">History</a>
     </nav>
@@ -273,7 +262,7 @@ details.card .fields{margin-top:12px}
 <main class="wrap">
   <section id="view-numbers" class="view" aria-label="Your numbers">
     <div class="note" id="example-note" hidden>
-      <p><strong>These are example numbers, not Burgerium’s.</strong> Change any of them to see the verdict move, then start your own.</p>
+      <p><strong>These are example numbers, not Burgerium’s.</strong> Change any of them to see the result move, then start your own.</p>
       <button class="btn" type="button" id="btn-start">Enter my numbers</button>
     </div>
     <div class="chips" id="chips" aria-label="Steps"></div>
@@ -285,7 +274,7 @@ details.card .fields{margin-top:12px}
     <p class="small" id="save-note"></p>
   </section>
 
-  <section id="view-verdict" class="view" aria-label="Verdict" hidden>
+  <section id="view-verdict" class="view" aria-label="Result" hidden>
     <div class="ticket" id="ticket" data-tone="wait"></div>
     <div class="btn-row">
       <button class="btn" type="button" id="btn-save">Save this check</button>
@@ -295,7 +284,7 @@ details.card .fields{margin-top:12px}
     </div>
     <textarea id="copy-fallback" readonly hidden aria-label="Summary text to copy"></textarea>
     <details class="card">
-      <summary>Pass marks <span>The limits each test uses. Change them if you disagree.</span></summary>
+      <summary>Pass marks <span>The limits each check uses. Adjust them to suit this outlet.</span></summary>
       <div class="fields two" id="thr-fields"></div>
       <div class="btn-row" style="margin-top:14px"><button class="btn ghost" type="button" id="btn-thr">Reset pass marks</button></div>
     </details>
@@ -303,8 +292,8 @@ details.card .fields{margin-top:12px}
 
   <section id="view-tracker" class="view" aria-label="60-day test" hidden>
     <div class="panel">
-      <h2>Agree the stop rule before week 1</h2>
-      <p class="small">If the outlet misses the target by week 6, or the test uses more cash than agreed, stop. Decide this now, while nobody is emotional about it.</p>
+      <h2>Agree the review point before week 1</h2>
+      <p class="small">If orders are still below target by week 6, or the test uses more cash than agreed, pause and review the plan together. Agreeing this up front keeps the later decision simple.</p>
       <div class="fields two" id="rule-fields"></div>
       <div class="facts" id="rule-facts"></div>
     </div>
@@ -469,37 +458,39 @@ const THR = [
   { id:'maxProd', label:'Most product complaints allowed', type:'pct', unit:'%', def:'30' },
   { id:'maxPrice', label:'Most price complaints allowed', type:'pct', unit:'%', def:'25' },
   { id:'gapOK', label:'Largest gap marketing alone can close', type:'num', unit:'× break-even', def:'1.5' },
-  { id:'gapStruct', label:'Gap that means a structural problem', type:'num', unit:'× break-even', def:'3' },
+  { id:'gapStruct', label:'Gap that needs a bigger change', type:'num', unit:'× break-even', def:'3' },
   { id:'minMonths', label:'Months of cash marketing needs', type:'num', unit:'months', def:'3' }
 ];
 const TESTS = [
-  { q:'Does every order make money?', fail:'Each extra order loses money, so more customers mean bigger losses. Fix price, food cost, discounts or commission terms before any campaign.' },
-  { q:'Profitable if customers doubled?', fail:'Even double the customers won’t cover the monthly bills. Rent and staff are the problem, not demand.' },
-  { q:'Can a full outlet break even?', fail:'The room can’t reach break-even even when every seat is full. Growth has to come from delivery or takeaway, or the rent or format has to change.' },
-  { q:'Do first-timers come back?', fail:'People try once and don’t return. Marketing would buy more one-time visits and more bad reviews. Fix the product or experience first.' },
-  { q:'Are product complaints low?', fail:'Complaints are about food, wait or service. Fix operations before paying for reach.' },
-  { q:'Is the price seen as fair?', fail:'Customers don’t think it’s worth the price. Change price, portion or combos. Ads can’t change what people think it’s worth.' },
-  { q:'Is the gap small enough for marketing?', fail:'The gap is too big for marketing alone. It needs a structural change, with marketing on top.', partial:'Marketing can close part of this gap. The rest needs a structural change: a new channel, a tighter menu or lower costs.' },
-  { q:'Is there time for marketing to work?', fail:'Cash runs out before marketing can build up. Decide now: cut costs, change format or close.' }
+  { q:'Does every order make money?', fail:'Orders on at least one channel cost more than they bring in, so more of them would deepen the loss. Price, food cost, discounts or commission terms come first.' },
+  { q:'Profitable if customers doubled?', fail:'Even with twice the customers, what’s left after food and other costs wouldn’t cover the monthly bills. Rent and staffing need a look before demand does.' },
+  { q:'Can a full outlet break even?', fail:'Even with every seat full, the dining room can’t cover the bills. Growth has to come from delivery or takeaway, or the rent or format needs to change.' },
+  { q:'Do first-timers come back?', fail:'Most first-time guests aren’t returning yet, so promotion now would bring visits that don’t repeat. The guest experience comes first.' },
+  { q:'Are product complaints low?', fail:'Reviews point to food, wait or service. Sorting these out first makes every rupee of reach work harder.' },
+  { q:'Is the price seen as fair?', fail:'Guests feel the price is high for what they get. Adjust price, portions or combos; ads can’t change how value feels.' },
+  { q:'Is the gap small enough for marketing?', fail:'The gap is bigger than marketing can close alone. Pair it with one bigger change.', partial:'Marketing can close part of this gap. The rest needs one bigger change: a new channel, a tighter menu or lower costs.' },
+  { q:'Is there time for marketing to work?', fail:'Cash may run short before marketing has time to pay back. Agree a plan now: trim costs, change the format, add cash or close.' }
 ];
 const VERDICTS = {
-  orders:{ tone:'bad', stamp:'Not a marketing problem', head:'Marketing can’t fix this', tail:'Every extra order loses money.', next:'Fix price, food cost, discounts or commission terms. Then run this check again.' },
-  costs:{ tone:'bad', stamp:'Not a marketing problem', head:'Marketing can’t fix this', tail:'The monthly bills are too high even with double the customers.', next:'Cut rent or staff cost, or change the format. More promotion will not close this.' },
-  cash:{ tone:'bad', stamp:'Decide now', head:'Not enough cash to wait', tail:'Marketing needs time this outlet doesn’t have.', next:'Decide this week: cut costs, change the format, add cash or close.' },
-  product:{ tone:'warn', stamp:'Fix first', head:'Fix the product first', tail:'Marketing now would bring more one-time visitors and more bad reviews.', next:'Fix what the low reviews complain about, get repeat visits up, then promote.' },
-  price:{ tone:'warn', stamp:'Fix first', head:'Fix price and value first', tail:'Customers don’t think it’s worth what they pay.', next:'Change price, portion or combos. Then market the new offer.' },
-  structural:{ tone:'bad', stamp:'Needs a bigger change', head:'Marketing alone won’t close the gap', tail:'The outlet is too far from break-even.', next:'Plan a structural change first: delivery, a smaller menu, lower costs or a new format.' },
-  dinein:{ tone:'warn', stamp:'Grow outside the room', head:'Dine-in is maxed out', tail:'A full room still can’t break even.', next:'Aim marketing at delivery and takeaway, or cut the cost of the space.' },
-  partial:{ tone:'warn', stamp:'Marketing plus a change', head:'Marketing can help, with a structural change', tail:'The gap is beyond what promotion alone can close.', next:'Pair the campaign with one structural move: delivery, combos or lower costs.' },
-  yes:{ tone:'good', stamp:'Marketing can fix it', head:'Marketing can fix this', tail:'The outlet works. Too few people know about it.', next:'Set the stop rule in the 60-day test, then spend on reach.' }
+  orders:{ tone:'bad', stamp:'Margin first', head:'Start with the margin on each order', tail:'Right now orders on at least one channel cost more than they bring in.', next:'Review price, food cost, discounts and app commission terms, then run this check again.' },
+  costs:{ tone:'bad', stamp:'Costs first', head:'Start with the monthly bills', tail:'Even with twice the customers, what’s left after food and other costs wouldn’t cover the monthly bills.', next:'Review rent, staffing and format. More promotion won’t close this on its own.' },
+  cash:{ tone:'bad', stamp:'Plan the cash', head:'Plan the cash first', tail:'Marketing needs a few months to pay back, and the cash runs short before then.', next:'Agree a plan this week: trim costs, change the format, add cash or close.' },
+  product:{ tone:'warn', stamp:'Experience first', head:'Start with the guest experience', tail:'Repeat visits or reviews show the guest experience needs attention, so new visitors might not return.', next:'Work on what reviews mention most and lift repeat visits, then promote.' },
+  price:{ tone:'warn', stamp:'Value first', head:'Start with price and value', tail:'Guests feel the price is high for what they get.', next:'Try changes to price, portions or combos, then promote the new offer.' },
+  structural:{ tone:'bad', stamp:'Bigger change first', head:'Plan a bigger change first', tail:'The outlet is further from break-even than promotion alone can cover.', next:'Pick one bigger change, such as delivery, a tighter menu, lower costs or a new format, and add marketing on top.' },
+  dinein:{ tone:'warn', stamp:'Grow beyond the room', head:'Grow beyond the dining room', tail:'Even a full dining room can’t cover the bills.', next:'Point marketing at delivery and takeaway, or lower the cost of the space.' },
+  partial:{ tone:'warn', stamp:'Partly ready', head:'Marketing plus one change', tail:'Promotion can close part of the gap to break-even, not all of it.', next:'Pair the campaign with one bigger change: delivery, combos or lower costs.' },
+  yes:{ tone:'good', stamp:'Ready', head:'Ready for marketing', tail:'The outlet works. More people need to know about it.', next:'Agree the review point on the 60-day plan, then invest in reach.' }
 };
 const TONE_S = { good:'pass', warn:'partial', bad:'fail' };
+// What each check status reads as on screen. The keys stay pass/partial/fail because styles and saved history use them.
+const LABEL = { pass:'Yes', partial:'Partly', fail:'Not yet' };
 const TRACK = {
-  'on':{ s:'pass', label:'ON TRACK', text:'At or above target.' },
-  'behind':{ s:'partial', label:'BEHIND', text:'Below target. Still inside the 6 weeks.' },
-  'stop-target':{ s:'fail', label:'STOP', text:'Target missed at week 6 or later.' },
-  'stop-cash':{ s:'fail', label:'STOP', text:'The cash limit is used up.' },
-  'no-target':{ s:'', label:'NO TARGET', text:'Set a target above.' }
+  'on':{ s:'pass', label:'On track', text:'At or above target.' },
+  'behind':{ s:'partial', label:'Below target', text:'Still inside the 6 weeks.' },
+  'stop-target':{ s:'fail', label:'Review', text:'Target not reached by week 6. Time to review the plan.' },
+  'stop-cash':{ s:'fail', label:'Review', text:'The agreed cash limit is used up. Time to review the plan.' },
+  'no-target':{ s:'', label:'No target', text:'Set a target above.' }
 };
 const WEEKS = 9;
 
@@ -652,7 +643,7 @@ function showStep() {
     if (i === state.step) chip.setAttribute('aria-current', 'step'); else chip.removeAttribute('aria-current');
   });
   $('btn-back').disabled = state.step === 0;
-  $('btn-next').textContent = state.step < SECTIONS.length - 1 ? 'Next: ' + SECTIONS[state.step + 1].short : 'See the verdict';
+  $('btn-next').textContent = state.step < SECTIONS.length - 1 ? 'Next: ' + SECTIONS[state.step + 1].short : 'See the result';
   const chip = $('chip-' + state.step);
   const box = $('chips');
   if (chip.offsetLeft < box.scrollLeft || chip.offsetLeft + chip.offsetWidth > box.scrollLeft + box.clientWidth) box.scrollLeft = chip.offsetLeft - 16;
@@ -702,7 +693,7 @@ function sums(c, res) {
     out.space = t + '.';
   }
   out.customers = 'To pass: at least <b>' + pct(c.thr.minRepeat) + '</b> come back, product complaints at most <b>' + pct(c.thr.maxProd) +
-    '</b>, price complaints at most <b>' + pct(c.thr.maxPrice) + '</b>. Change these under Pass marks on the Verdict tab.';
+    '</b>, price complaints at most <b>' + pct(c.thr.maxPrice) + '</b>. Adjust these under Pass marks on the Result tab.';
   out.cash = !res ? 'Fill in every step to see how long the cash lasts.'
     : res.m.runway === null ? 'At these numbers the outlet isn’t losing money.'
     : 'At a monthly loss of ' + money(res.m.profit) + ', this cash lasts about <b>' + one(res.m.runway) + ' months</b>.';
@@ -734,7 +725,7 @@ function meterHTML(m, thr) {
 }
 function renderTicket(c, res) {
   const t = $('ticket');
-  const head = '<div class="t-head"><span>Burgerium · outlet check</span><span>' + dLong(new Date()) + '</span></div>';
+  const head = '<div class="t-head"><span>Burgerium outlet check</span><span>' + dLong(new Date()) + '</span></div>';
   if (!res) {
     const miss = FIELDS.filter(f => c.status[f.id].s === 'need' || c.status[f.id].s === 'bad');
     const first = SECTIONS.findIndex(s => s.fields.some(f => miss.includes(f)));
@@ -743,21 +734,20 @@ function renderTicket(c, res) {
     t.innerHTML = head + '<div class="stamp">Not ready</div><div class="t-verdict">' +
       (c.missing ? c.missing + ' number' + (c.missing === 1 ? '' : 's') + ' still to fill' : 'Check the numbers marked in red') + '</div>' +
       '<p class="t-missing">' + names + '.</p><button class="btn" type="button" data-goto="' + Math.max(0, first) + '">Fill these in</button>' +
-      '<hr class="rule"><div class="t-title">The 8 tests</div><ol class="tests">' +
-      TESTS.map((x, i) => '<li><div class="test-row"><span class="test-n">' + (i + 1) + '</span><span class="test-q">' + x.q + '</span><span class="pill">WAIT</span></div></li>').join('') + '</ol>';
+      '<hr class="rule"><div class="t-title">The 8 checks</div><ol class="tests">' +
+      TESTS.map((x, i) => '<li><div class="test-row"><span class="test-n">' + (i + 1) + '</span><span class="test-q">' + x.q + '</span><span class="pill">Waiting</span></div></li>').join('') + '</ol>';
     return;
   }
   const V = VERDICTS[res.verdict], m = res.m;
   t.dataset.tone = V.tone;
-  const fails = res.status.filter(s => s === 'fail').length, parts = res.status.filter(s => s === 'partial').length;
   let h = head + '<div class="stamp">' + V.stamp + '</div><div class="t-verdict">' + V.head + '</div><p class="t-tail">' + V.tail + '</p>' +
-    '<p class="t-next"><strong>Next:</strong> ' + V.next + '</p>' + (state.example ? '<p class="t-foot">Printed from example numbers, not Burgerium’s.</p>' : '') +
+    '<p class="t-next"><strong>Next step:</strong> ' + V.next + '</p>' + (state.example ? '<p class="t-foot">Printed from example numbers, not Burgerium’s.</p>' : '') +
     '<hr class="rule">' + meterHTML(m, last.thr) +
-    '<hr class="rule"><div class="t-title">The 8 tests · ' + fails + ' failed' + (parts ? ', ' + parts + ' partial' : '') + '</div><ol class="tests">';
+    '<hr class="rule"><div class="t-title">The 8 checks: ' + checkCount(res.status) + '</div><ol class="tests">';
   TESTS.forEach((x, i) => {
     const s = res.status[i];
     h += '<li><div class="test-row"><span class="test-n">' + (i + 1) + '</span><span class="test-q">' + x.q + '<small>' + testValue(i, m) + '</small></span>' +
-      '<span class="pill" data-s="' + s + '">' + s.toUpperCase() + '</span></div>' +
+      '<span class="pill" data-s="' + s + '">' + LABEL[s] + '</span></div>' +
       (s === 'fail' ? '<p class="test-why">' + x.fail + '</p>' : s === 'partial' ? '<p class="test-why" data-s="partial">' + x.partial + '</p>' : '') + '</li>';
   });
   h += '</ol><hr class="rule"><div class="t-title">The numbers behind it</div><div class="lines">' +
@@ -778,12 +768,17 @@ function renderTicket(c, res) {
     '</div><p class="t-foot">“Left per order” is the bill minus food, discounts, commission, packaging and other costs that grow with sales. The doubled-orders line assumes the monthly bills stay the same.</p>';
   t.innerHTML = h;
 }
+// "4 yes, 1 partly, 3 not yet", leading with what is already working.
+function checkCount(status) {
+  return ['pass', 'partial', 'fail'].map(k => [status.filter(s => s === k).length, LABEL[k].toLowerCase()])
+    .filter(([n]) => n > 0).map(([n, l]) => n + ' ' + l).join(', ');
+}
 function summaryText(c, res) {
   if (!res) return 'Burgerium outlet check: ' + c.missing + ' numbers still to fill.';
   const V = VERDICTS[res.verdict], m = res.m;
-  const L = ['BURGERIUM OUTLET CHECK' + (state.example ? ' (EXAMPLE NUMBERS)' : ''), dLong(new Date()), '',
-    'VERDICT: ' + V.head + '. ' + V.tail, 'Next: ' + V.next, ''];
-  TESTS.forEach((x, i) => L.push((i + 1) + '. ' + x.q + ' ' + res.status[i].toUpperCase() + ' (' + testValue(i, m) + ')'));
+  const L = ['Burgerium outlet check' + (state.example ? ' (example numbers)' : ''), dLong(new Date()), '',
+    'Result: ' + V.head + '. ' + V.tail, 'Next step: ' + V.next, '', 'The 8 checks: ' + checkCount(res.status)];
+  TESTS.forEach((x, i) => L.push((i + 1) + '. ' + x.q + ' ' + LABEL[res.status[i]] + ': ' + testValue(i, m)));
   L.push('', 'Orders per day now: ' + one(m.ordersDay), 'Break-even orders per day: ' + (m.beDay === null ? 'never' : one(m.beDay)),
     'Monthly sales: ' + inr(m.sales), 'Monthly bills: ' + inr(m.fixed), 'Monthly profit or loss: ' + inr(m.profit),
     'Months of cash left: ' + (m.runway === null ? 'not losing money' : one(m.runway)));
@@ -862,14 +857,14 @@ function renderHistory() {
   const list = state.history.slice().sort((a, b) => a.at < b.at ? -1 : 1);
   $('hist-chart').innerHTML = histChart(list);
   $('hist').innerHTML = !list.length
-    ? '<li class="small chart-empty">No saved checks yet. Fill in your numbers, open the Verdict tab and tap Save this check.</li>'
+    ? '<li class="small chart-empty">No saved checks yet. Fill in your numbers, open the Result tab and tap Save this check.</li>'
     : list.slice().reverse().map(h => {
         const V = VERDICTS[h.verdict] || { head:'Saved check', tone:'' };
         const nums = (typeof h.ordersDay === 'number' ? one(h.ordersDay) + ' a day' : '') +
           (typeof h.beDay === 'number' ? ' · break-even ' + one(h.beDay) : '') +
           (typeof h.profit === 'number' ? ' · ' + inr(h.profit) + ' a month' : '');
         return '<li class="h-item"><div class="h-top"><span>' + dLong(new Date(h.at)) + (h.example ? ' · example' : '') + '</span>' +
-          '<span class="pill" data-s="' + (TONE_S[V.tone] || '') + '">' + (typeof h.fails === 'number' ? h.fails + ' FAILED' : 'SAVED') + '</span></div>' +
+          '<span class="pill" data-s="' + (TONE_S[V.tone] || '') + '">' + (typeof h.fails === 'number' ? (h.fails ? h.fails + ' to work on' : 'Nothing blocking') : 'Saved') + '</span></div>' +
           '<div class="h-head">' + V.head + '</div><div class="h-nums">' + nums + '</div>' +
           '<div class="h-acts"><button class="btn ghost" type="button" data-load="' + h.id + '">Load these numbers</button>' +
           '<button class="btn ghost danger" type="button" data-del="' + h.id + '">Delete</button></div></li>';
@@ -905,7 +900,7 @@ function refresh() {
   } else {
     bar.dataset.tone = 'wait';
     $('bar-head').textContent = c.missing ? c.missing + ' number' + (c.missing === 1 ? '' : 's') + ' to go' : 'Check the red fields';
-    $('bar-tail').textContent = 'The verdict appears when every required number is in.';
+    $('bar-tail').textContent = 'Your result appears once every required number is in.';
   }
   Array.from($('marks').children).forEach((el, i) => el.dataset.s = res ? res.status[i] : '');
   renderTicket(c, res);
@@ -915,7 +910,7 @@ function refresh() {
   save();
   $('save-note').textContent = storageOK
     ? 'Saved on this device only. Nothing is sent anywhere, and nobody else who opens this page sees your numbers.'
-    : 'This browser won’t save the numbers. They stay until you close the page. Use Copy summary on the Verdict tab to keep a record.';
+    : 'This browser won’t save the numbers. They stay until you close the page. Use Copy summary on the Result tab to keep a record.';
 }
 
 // ---------- actions ----------

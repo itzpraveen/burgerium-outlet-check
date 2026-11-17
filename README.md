@@ -26,7 +26,7 @@ To use an address like `check.burgerium.in`, add the domain in the host's custom
 ## Updating the app
 
 1. Replace `index.html` with the new version.
-2. In the first lines of `sw.js`, raise the version: `outlet-check-v1` becomes `outlet-check-v2`. Installed phones then pick up the new version the next time they open it online.
+2. In the first lines of `sw.js`, raise the version number by one (for example `outlet-check-v2` becomes `outlet-check-v3`). Installed phones then pick up the new version the next time they open it online.
 
 ## Privacy
 
