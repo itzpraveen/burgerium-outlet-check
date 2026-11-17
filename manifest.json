@@ -1,7 +1,7 @@
 {
-  "name": "Burgerium Outlet Check",
+  "name": "Outlet Check",
   "short_name": "Outlet Check",
-  "description": "Eight quick checks that show what this outlet needs next.",
+  "description": "Eight quick checks that show what a restaurant outlet needs next.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

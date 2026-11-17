@@ -1,6 +1,8 @@
-# Burgerium Outlet Check
+# Outlet Check
 
-A one-page app with no server and no database. Numbers are saved only in the browser of the phone or laptop that typed them.
+Eight quick checks that show what a restaurant outlet needs next: marketing, or something to sort out first, such as margins, monthly bills, the guest experience, value for money or cash. It works for dine-in restaurants, cafés and quick-service outlets, with or without delivery, and for delivery-only kitchens (enter 0 seats and the dining-room check is skipped).
+
+A one-page app with no server and no database. Numbers are saved only in the browser of the phone or laptop that typed them. One device can keep several outlets: pick one, rename it or add another from the **Outlet** box at the top.
 
 Files: `index.html` (the app), `manifest.json`, `sw.js` and the icons (these let it install on a phone and open offline).
 
@@ -21,7 +23,7 @@ Files: `index.html` (the app), `manifest.json`, `sw.js` and the icons (these let
 
 ### Your own address (optional)
 
-To use an address like `check.burgerium.in`, add the domain in the host's custom-domain settings and create the DNS record it asks for (usually a CNAME) where the domain is managed.
+To use an address like `check.example.com`, add the domain in the host's custom-domain settings and create the DNS record it asks for (usually a CNAME) where the domain is managed.
 
 ## Updating the app
 
@@ -31,5 +33,5 @@ To use an address like `check.burgerium.in`, add the domain in the host's custom
 ## Privacy
 
 - Each person's numbers stay in their own browser. Two owners on two phones do not see each other's entries. Use **Copy summary** or **History → Download backup** to share or keep them.
-- Clearing browser data deletes the numbers. Download a backup now and then.
-- The page tells search engines not to list it. Anyone with the link can still open it, but they see an empty app, not Burgerium's numbers.
+- Clearing browser data deletes the numbers. Download a backup now and then. One backup file holds every outlet on the device, and restoring it never removes outlets that are already there.
+- The page tells search engines not to list it. Anyone with the link can still open it, but they see an empty app with example numbers, not yours.

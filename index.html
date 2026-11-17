@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Burgerium Outlet Check</title>
+<title>Outlet Check</title>
 <meta name="description" content="Eight quick checks that show where time and money will help a restaurant outlet most right now.">
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#fbfaf7">
@@ -45,9 +45,21 @@ button,input{font:inherit;color:inherit}
 .logo{width:30px;height:30px;flex:none}
 .logo .bun{fill:var(--accent)} .logo .patty{fill:var(--ink)} .logo .seed{fill:var(--surface)}
 .wordmark{font-family:var(--display);font-weight:700;font-size:17px;letter-spacing:-.01em}
-.wordmark span{font-weight:500;color:var(--muted)}
 .top h1{font-size:clamp(30px,8vw,42px);line-height:1.05;font-weight:800;letter-spacing:-.025em;margin:14px 0 10px}
 .lede{color:var(--muted);max-width:52ch;font-size:15.5px}
+
+/* Outlet picker: which outlet's numbers are on screen */
+.outlet{margin-top:20px;max-width:520px}
+.outlet-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:6px}
+.outlet-top label{font-size:13px;font-weight:500;color:var(--muted)}
+.linkbtn{border:0;background:none;padding:8px 2px;margin:-8px 0;font-size:14px;font-weight:500;color:var(--ink);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.outlet-row{display:flex;gap:8px}
+.outlet-row select,.outlet-row .inp{flex:1;min-width:0}
+.outlet-row .btn{flex:none}
+.outlet-row select{appearance:none;-webkit-appearance:none;min-height:46px;border:1px solid var(--field);border-radius:10px;padding:10px 38px 10px 12px;font-family:var(--display);font-weight:700;font-size:17px;color:var(--ink);cursor:pointer;text-overflow:ellipsis;
+  background:var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%236b645a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 14px center}
+.outlet-row select:focus-visible{outline:2px solid var(--ink);outline-offset:1px}
+.outlet-row .inp input{font-family:var(--body);font-weight:600;padding:11px 12px}
 
 /* Sticky verdict strip */
 .bar{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
@@ -58,6 +70,7 @@ button,input{font:inherit;color:inherit}
 .bar[data-tone="bad"] .dot{background:var(--bad)}
 .bar-text{flex:1;min-width:0;line-height:1.25}
 .bar-text strong{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;font-family:var(--display);font-weight:700;font-size:16px;line-height:1.2}
+.bar-text small{display:block;font-size:12.5px;font-weight:500;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .bar-text span{display:block;font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 @media (max-width:519px){.bar-text span{display:none}}
 .marks{display:flex;gap:3px;flex:none}
@@ -237,17 +250,29 @@ details.card .fields{margin-top:12px}
 <header class="wrap top">
   <div class="brand">
     <svg class="logo" viewBox="0 0 48 48" aria-hidden="true"><path class="bun" d="M7 23a17 13 0 0 1 34 0z"/><circle class="seed" cx="18" cy="16" r="1.4"/><circle class="seed" cx="25" cy="13" r="1.4"/><circle class="seed" cx="31" cy="17" r="1.4"/><rect class="patty" x="6" y="25.5" width="36" height="6" rx="3"/><rect class="bun" x="7" y="33.5" width="34" height="7" rx="3.5"/></svg>
-    <span class="wordmark">Burgerium <span>Outlet Check</span></span>
+    <span class="wordmark">Outlet Check</span>
   </div>
   <h1>What does this outlet need next?</h1>
   <p class="lede">Add your averages from the last three months. Eight quick checks show where time and money will help most right now, whether that’s marketing, pricing, the guest experience or costs.</p>
+  <div class="outlet">
+    <div class="outlet-top"><label for="outlet-pick" id="outlet-l">Outlet</label><button class="linkbtn" type="button" id="btn-rename">Rename</button></div>
+    <div class="outlet-row" id="outlet-row">
+      <select id="outlet-pick"></select>
+      <button class="btn ghost" type="button" id="btn-new">New outlet</button>
+    </div>
+    <form class="outlet-row" id="outlet-edit" hidden>
+      <div class="inp"><input id="outlet-name" maxlength="60" autocomplete="off" enterkeyhint="done" placeholder="e.g. MG Road"></div>
+      <button class="btn" type="submit">Save</button>
+      <button class="btn ghost" type="button" id="btn-name-cancel">Cancel</button>
+    </form>
+  </div>
 </header>
 
 <div class="bar" id="bar" data-tone="wait">
   <div class="wrap">
     <div class="bar-in">
       <span class="dot" aria-hidden="true"></span>
-      <div class="bar-text" aria-live="polite"><strong id="bar-head">Loading</strong><span id="bar-tail"></span></div>
+      <div class="bar-text" aria-live="polite"><small id="bar-outlet" hidden></small><strong id="bar-head">Loading</strong><span id="bar-tail"></span></div>
       <div class="marks" id="marks" aria-hidden="true"></div>
     </div>
     <nav class="tabs" aria-label="Sections">
@@ -262,7 +287,7 @@ details.card .fields{margin-top:12px}
 <main class="wrap">
   <section id="view-numbers" class="view" aria-label="Your numbers">
     <div class="note" id="example-note" hidden>
-      <p><strong>These are example numbers, not Burgerium’s.</strong> Change any of them to see the result move, then start your own.</p>
+      <p><strong>These are example numbers.</strong> Change any of them to see the result move, then start your own.</p>
       <button class="btn" type="button" id="btn-start">Enter my numbers</button>
     </div>
     <div class="chips" id="chips" aria-label="Steps"></div>
@@ -309,7 +334,7 @@ details.card .fields{margin-top:12px}
 
   <section id="view-history" class="view" aria-label="History" hidden>
     <div class="panel">
-      <h2>Saved checks</h2>
+      <h2 id="hist-title">Saved checks</h2>
       <p class="small">Save a check once a month. The line shows whether the outlet is closing the gap to break-even.</p>
       <div id="hist-chart"></div>
       <ol class="hist" id="hist"></ol>
@@ -322,9 +347,10 @@ details.card .fields{margin-top:12px}
         <label class="btn ghost file">Restore from backup<input class="sr" type="file" id="file-restore" accept=".json,application/json"></label>
       </div>
       <div class="btn-row">
-        <button class="btn ghost" type="button" id="btn-example">Load example numbers</button>
-        <button class="btn ghost danger" type="button" id="btn-clear">Clear my numbers</button>
+        <button class="btn ghost" type="button" id="btn-example">Try example numbers</button>
+        <button class="btn ghost danger" type="button" id="btn-clear">Clear this outlet’s numbers</button>
       </div>
+      <div class="btn-row" id="del-outlet-row" hidden><button class="btn ghost danger" type="button" id="btn-del-outlet">Delete this outlet</button></div>
       <div class="btn-row" id="install-box" hidden><button class="btn" type="button" id="btn-install">Install on this phone</button></div>
       <p class="small" id="ios-hint" style="margin-top:12px" hidden>To keep it on your iPhone: tap Share, then Add to Home Screen.</p>
     </div>
@@ -349,6 +375,8 @@ const Logic = (() => {
     const beDay = (cBlend > 0 && v.days > 0) ? fixed / cBlend / v.days : null;
     const gap = (beDay !== null && ordersDay > 0) ? beDay / ordersDay : null;
     const profit2x = 2 * contrib - fixed;
+    // The dining-room check only applies to outlets that have seats and take dine-in orders.
+    const hasRoom = v.seats > 0 && v.dineOrders > 0;
     const maxDine = v.guests > 0 ? v.seats * v.turns / v.guests : 0;
     const profitFull = maxDine * v.days * cDine + v.delOrders * cDel - fixed;
     const runway = profit >= 0 ? null : v.cash / (-profit);
@@ -360,7 +388,7 @@ const Logic = (() => {
     const s = [
       weakest > 0 ? 'pass' : 'fail',
       profit2x > 0 ? 'pass' : 'fail',
-      profitFull > 0 ? 'pass' : 'fail',
+      !hasRoom ? 'na' : profitFull > 0 ? 'pass' : 'fail',
       v.repeat >= t.minRepeat ? 'pass' : 'fail',
       v.prodComplaints <= t.maxProd ? 'pass' : 'fail',
       v.priceComplaints <= t.maxPrice ? 'pass' : 'fail',
@@ -379,7 +407,7 @@ const Logic = (() => {
     else verdict = 'yes';
 
     return {
-      m: { ordersDay, sales, cDine, cDel, contrib, margin, cBlend, fixed, profit, beDay, gap, profit2x, maxDine, profitFull, runway, weakest,
+      m: { ordersDay, sales, cDine, cDel, contrib, margin, cBlend, fixed, profit, beDay, gap, profit2x, hasRoom, maxDine, profitFull, runway, weakest,
            actionRate: (v.views && v.actions != null) ? v.actions / v.views : null },
       status: s, verdict
     };
@@ -409,15 +437,18 @@ const Logic = (() => {
 <script>
 (() => {
 const $ = id => document.getElementById(id);
-const KEY = 'burgerium-outlet-check-v2', KEY_OLD = 'burgerium-outlet-check-v1';
+const KEY = 'outlet-check-v3';
+// Earlier versions kept one outlet under these keys. They are read once to carry the data over and never written,
+// so a phone still running an older cached copy can't be broken by the new format.
+const KEY_V2 = 'burgerium-outlet-check-v2', KEY_V1 = 'burgerium-outlet-check-v1';
 const framed = (() => { try { return window.self !== window.top; } catch (e) { return true; } })();
 
 const SECTIONS = [
   { id:'orders', short:'Orders', title:'Orders and bills', note:'Monthly averages from the last three months.', fields:[
     { id:'days', label:'Days open per month', hint:'Usually 30.', type:'num', ex:'30' },
-    { id:'dineOrders', label:'Dine-in orders per month', hint:'From your POS or billing software.', type:'num', ex:'1500' },
+    { id:'dineOrders', label:'Dine-in orders per month', hint:'From your POS or billing software. Enter 0 if you only do delivery.', type:'num', ex:'1500' },
     { id:'delOrders', label:'Delivery orders per month', hint:'Swiggy and Zomato partner dashboards. Enter 0 if you are not listed.', type:'num', ex:'600' },
-    { id:'dineBill', label:'Average dine-in bill', hint:'Before GST. Dine-in sales ÷ dine-in orders.', type:'inr', ex:'550' },
+    { id:'dineBill', label:'Average dine-in bill', hint:'Before GST. Dine-in sales ÷ dine-in orders.', type:'inr', dine:true, ex:'550' },
     { id:'delAOV', label:'Average delivery order value', hint:'Before GST and before commission.', type:'inr', del:true, ex:'480' }
   ]},
   { id:'costs', short:'Costs', title:'Cost of each order', note:'Costs that rise and fall with sales.', fields:[
@@ -435,9 +466,9 @@ const SECTIONS = [
     { id:'otherFixed', label:'Other fixed costs', hint:'Software, licences, loan EMI, repairs.', type:'inr', unit:'a month', ex:'30000' }
   ]},
   { id:'space', short:'Room', title:'The room', note:'How many orders the space can hold.', fields:[
-    { id:'seats', label:'Seats', hint:'Count them.', type:'num', ex:'40' },
-    { id:'turns', label:'Times each seat fills on a busy day', hint:'Use your best day so far, not a hope.', type:'num', ex:'3' },
-    { id:'guests', label:'Guests per dine-in bill', hint:'POS covers ÷ bills.', type:'num', ex:'2.2' }
+    { id:'seats', label:'Seats', hint:'Count them. Enter 0 if there is no seating.', type:'num', dine:true, ex:'40' },
+    { id:'turns', label:'Times each seat fills on a busy day', hint:'Use your best day so far, not a hope.', type:'num', room:true, ex:'3' },
+    { id:'guests', label:'Guests per dine-in bill', hint:'POS covers ÷ bills.', type:'num', room:true, ex:'2.2' }
   ]},
   { id:'customers', short:'Customers', title:'Customers', note:'Read your last 50 Google and Zomato reviews for the two complaint numbers.', fields:[
     { id:'repeat', label:'First-timers who come back within 30 days', hint:'Phone numbers in POS or loyalty app, or the apps’ repeat-customer figure.', type:'pct', unit:'%', ex:'22' },
@@ -484,7 +515,7 @@ const VERDICTS = {
 };
 const TONE_S = { good:'pass', warn:'partial', bad:'fail' };
 // What each check status reads as on screen. The keys stay pass/partial/fail because styles and saved history use them.
-const LABEL = { pass:'Yes', partial:'Partly', fail:'Not yet' };
+const LABEL = { pass:'Yes', partial:'Partly', fail:'Not yet', na:'Skipped' };
 const TRACK = {
   'on':{ s:'pass', label:'On track', text:'At or above target.' },
   'behind':{ s:'partial', label:'Below target', text:'Still inside the 6 weeks.' },
@@ -494,41 +525,67 @@ const TRACK = {
 };
 const WEEKS = 9;
 
-let state = null, storageOK = true, last = null, lastRes = null;
+// store: every outlet on this device. state: the outlet on screen, always the same object as its entry in store.outlets,
+// so every edit to state.* is saved with the store.
+let store = null, state = null, storageOK = true, last = null, lastRes = null;
 
 // ---------- state and storage ----------
+const newId = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+const cleanName = n => String(n == null ? '' : n).replace(/\s+/g, ' ').trim().slice(0, 60);
 const blankTracker = () => ({ target:'', limit:'', start:'', weeks:Array.from({ length:WEEKS }, () => ({ o:'', p:'' })) });
-const blankState = history => ({ v:2, example:false, step:0, vals:{ days:'30' }, thr:{}, tracker:blankTracker(), history: history || [] });
-const exampleState = history => { const s = blankState(history); s.example = true; FIELDS.forEach(f => s.vals[f.id] = f.ex); return s; };
-const valid = d => !!(d && d.v === 2 && d.vals && typeof d.vals === 'object' && d.tracker && Array.isArray(d.tracker.weeks) && Array.isArray(d.history));
+// Clears an outlet's numbers in place, optionally filling in example numbers. Keeps its id, name and saved checks.
+function resetOutlet(o, example) {
+  o.example = !!example; o.step = 0; o.vals = { days:'30' }; o.thr = {}; o.tracker = blankTracker();
+  if (example) FIELDS.forEach(f => o.vals[f.id] = f.ex);
+  return o;
+}
+const newOutlet = (name, example) => resetOutlet({ id:newId(), name:cleanName(name), history:[] }, example);
+const storeOf = o => ({ v:3, current:o.id, outlets:[o] });
+const validOutlet = d => !!(d && d.vals && typeof d.vals === 'object' && d.tracker && Array.isArray(d.tracker.weeks) && Array.isArray(d.history));
+const validStore = d => !!(d && d.v === 3 && Array.isArray(d.outlets) && d.outlets.length && d.outlets.every(validOutlet));
 function normalise(d) {
+  d.id = typeof d.id === 'string' && d.id ? d.id : newId();
+  d.example = !!d.example;
+  d.name = cleanName(d.name) || (d.example ? 'Example outlet' : 'My outlet');
   d.thr = d.thr || {};
   d.step = Number.isInteger(d.step) && d.step >= 0 && d.step < SECTIONS.length ? d.step : 0;
   d.tracker.weeks = d.tracker.weeks.slice(0, WEEKS).map(w => ({ o: String((w && w.o) || ''), p: String((w && w.p) || '') }));
   while (d.tracker.weeks.length < WEEKS) d.tracker.weeks.push({ o:'', p:'' });
   ['target','limit','start'].forEach(k => d.tracker[k] = String(d.tracker[k] || ''));
   d.history = d.history.filter(h => h && h.id && h.at && h.vals);
+  delete d.v;
+  return d;
+}
+function normaliseStore(d) {
+  const seen = new Set();
+  d.outlets = d.outlets.map(normalise);
+  d.outlets.forEach(o => { if (seen.has(o.id)) o.id = newId(); seen.add(o.id); });
+  if (!d.outlets.some(o => o.id === d.current)) d.current = d.outlets[0].id;
   return d;
 }
 function load() {
   try {
     const raw = localStorage.getItem(KEY);
-    if (raw) { const d = JSON.parse(raw); if (valid(d)) return normalise(d); }
-    const old = localStorage.getItem(KEY_OLD);
-    if (old) {
-      const o = JSON.parse(old);
+    if (raw) { const d = JSON.parse(raw); if (validStore(d)) return normaliseStore(d); }
+    // Carry over a single outlet saved by an earlier version.
+    const v2 = localStorage.getItem(KEY_V2);
+    if (v2) { const d = JSON.parse(v2); if (d && d.v === 2 && validOutlet(d)) return storeOf(normalise(d)); }
+    const v1 = localStorage.getItem(KEY_V1);
+    if (v1) {
+      const o = JSON.parse(v1);
       if (o && o.vals) {
-        const s = blankState(); s.vals = o.vals; s.thr = o.thr || {}; s.example = !!o.example;
+        const s = newOutlet('', !!o.example); s.vals = o.vals; s.thr = o.thr || {};
         if (o.tracker) { s.tracker.target = o.tracker.target || ''; s.tracker.limit = o.tracker.limit || ''; if (Array.isArray(o.tracker.weeks)) s.tracker.weeks = o.tracker.weeks; }
-        return normalise(s);
+        return storeOf(normalise(s));
       }
     }
   } catch (e) { storageOK = false; }
   return null;
 }
-function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); storageOK = true; } catch (e) { storageOK = false; } }
+function save() { try { localStorage.setItem(KEY, JSON.stringify(store)); storageOK = true; } catch (e) { storageOK = false; } }
 
 // ---------- formatting ----------
+const esc = t => String(t).replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' })[c]);
 const inr = n => { const r = Math.round(n); return (r < 0 ? '−' : '') + '₹' + Math.abs(r).toLocaleString('en-IN'); };
 const one = n => n.toLocaleString('en-IN', { minimumFractionDigits:1, maximumFractionDigits:1 });
 const pct = n => Math.round(n * 100) + '%';
@@ -562,14 +619,17 @@ function pretty(type, raw, allowNeg) {
 }
 function collect() {
   const vals = {}, status = {}; let missing = 0, bad = 0;
-  const del = readField(FIELDS.find(f => f.id === 'delOrders'), state.vals.delOrders);
-  const noDelivery = del.state === 'ok' && del.value === 0;
+  // Fields that don't apply are greyed out and not required: delivery fields with no delivery orders,
+  // dine-in fields with no dine-in orders, and room fields with no seats.
+  const zero = id => { const r = readField(FIELDS.find(f => f.id === id), state.vals[id]); return r.state === 'ok' && r.value === 0; };
+  const noDelivery = zero('delOrders'), noDine = zero('dineOrders'), noRoom = noDine || zero('seats');
+  const off = f => (f.del && noDelivery) || (f.dine && noDine) || (f.room && noRoom);
   FIELDS.forEach(f => {
     const r = readField(f, state.vals[f.id]);
-    const notNeeded = f.optional || (f.del && noDelivery);
+    const notNeeded = f.optional || off(f);
     if (r.state === 'ok') { vals[f.id] = r.value; status[f.id] = { s:'ok' }; }
     else if (r.state === 'bad') { bad++; status[f.id] = { s:'bad', msg:r.msg }; }
-    else if (notNeeded) { vals[f.id] = f.optional ? null : 0; status[f.id] = { s: f.del && noDelivery ? 'off' : 'empty' }; }
+    else if (notNeeded) { vals[f.id] = f.optional ? null : 0; status[f.id] = { s: off(f) ? 'off' : 'empty' }; }
     else { missing++; status[f.id] = { s:'need' }; }
   });
   const thr = {};
@@ -687,7 +747,9 @@ function sums(c, res) {
     out.bills = 'Monthly bills' + (filled.length < billIds.length ? ' so far' : '') + ': <b>' + inr(tot) + '</b>' +
       (filled.length === billIds.length && ok('days') ? ', about <b>' + inr(tot / v('days')) + '</b> for every day you open.' : '.');
   }
-  if (['seats', 'turns', 'guests'].every(ok)) {
+  if ((c.status.dineOrders.s === 'ok' && v('dineOrders') === 0) || (c.status.seats.s === 'ok' && v('seats') === 0)) {
+    out.space = 'No dine-in seating or orders, so the dining-room check is skipped.';
+  } else if (['seats', 'turns', 'guests'].every(id => c.status[id].s === 'ok')) {
     let t = 'The room can serve up to <b>' + one(v('seats') * v('turns') / v('guests')) + '</b> dine-in orders a day';
     if (ok('days') && ok('dineOrders')) t += '. You average <b>' + one(v('dineOrders') / v('days')) + '</b>';
     out.space = t + '.';
@@ -704,7 +766,7 @@ function sums(c, res) {
 function testValue(i, m) {
   if (i === 0) return inr(m.weakest) + ' left per order on the weaker channel';
   if (i === 1) return inr(m.profit2x) + ' a month at double the orders';
-  if (i === 2) return inr(m.profitFull) + ' a month with every seat full';
+  if (i === 2) return m.hasRoom ? inr(m.profitFull) + ' a month with every seat full' : 'No dine-in seating, so this check is skipped';
   if (i === 3) return pct(last.vals.repeat) + ' return (pass mark ' + pct(last.thr.minRepeat) + ')';
   if (i === 4) return pct(last.vals.prodComplaints) + ' of reviews (limit ' + pct(last.thr.maxProd) + ')';
   if (i === 5) return pct(last.vals.priceComplaints) + ' of reviews (limit ' + pct(last.thr.maxPrice) + ')';
@@ -725,7 +787,7 @@ function meterHTML(m, thr) {
 }
 function renderTicket(c, res) {
   const t = $('ticket');
-  const head = '<div class="t-head"><span>Burgerium outlet check</span><span>' + dLong(new Date()) + '</span></div>';
+  const head = '<div class="t-head"><span>' + esc(state.name) + '</span><span>' + dLong(new Date()) + '</span></div>';
   if (!res) {
     const miss = FIELDS.filter(f => c.status[f.id].s === 'need' || c.status[f.id].s === 'bad');
     const first = SECTIONS.findIndex(s => s.fields.some(f => miss.includes(f)));
@@ -741,7 +803,7 @@ function renderTicket(c, res) {
   const V = VERDICTS[res.verdict], m = res.m;
   t.dataset.tone = V.tone;
   let h = head + '<div class="stamp">' + V.stamp + '</div><div class="t-verdict">' + V.head + '</div><p class="t-tail">' + V.tail + '</p>' +
-    '<p class="t-next"><strong>Next step:</strong> ' + V.next + '</p>' + (state.example ? '<p class="t-foot">Printed from example numbers, not Burgerium’s.</p>' : '') +
+    '<p class="t-next"><strong>Next step:</strong> ' + V.next + '</p>' + (state.example ? '<p class="t-foot">Printed from example numbers.</p>' : '') +
     '<hr class="rule">' + meterHTML(m, last.thr) +
     '<hr class="rule"><div class="t-title">The 8 checks: ' + checkCount(res.status) + '</div><ol class="tests">';
   TESTS.forEach((x, i) => {
@@ -754,29 +816,28 @@ function renderTicket(c, res) {
     textLine('Orders per day now', one(m.ordersDay)) +
     textLine('Break-even orders per day', m.beDay === null ? 'Never' : one(m.beDay)) +
     moneyLine('Monthly sales', m.sales) +
-    moneyLine('Left per dine-in order', m.cDine) +
+    (last.vals.dineOrders > 0 ? moneyLine('Left per dine-in order', m.cDine) : '') +
     (last.vals.delOrders > 0 ? moneyLine('Left per delivery order', m.cDel) : '') +
     textLine('Left from each ₹100 of sales', inr(m.margin * 100)) +
     moneyLine('Monthly bills', m.fixed) +
     moneyLine('Monthly profit or loss', m.profit) +
     moneyLine('If orders doubled', m.profit2x) +
-    textLine('Most dine-in orders the room holds a day', one(m.maxDine)) +
-    moneyLine('With every seat full', m.profitFull) +
+    (m.hasRoom ? textLine('Most dine-in orders the room holds a day', one(m.maxDine)) + moneyLine('With every seat full', m.profitFull) : '') +
     textLine('Months of cash left', m.runway === null ? 'Not losing money' : one(m.runway)) +
     (m.actionRate !== null ? textLine('Google views that call or ask directions', pct(m.actionRate)) : '') +
     (last.vals.closeCost != null ? moneyLine('Net cost to close now', last.vals.closeCost) : '') +
     '</div><p class="t-foot">“Left per order” is the bill minus food, discounts, commission, packaging and other costs that grow with sales. The doubled-orders line assumes the monthly bills stay the same.</p>';
   t.innerHTML = h;
 }
-// "4 yes, 1 partly, 3 not yet", leading with what is already working.
+// "4 yes, 1 partly, 2 not yet, 1 skipped", leading with what is already working.
 function checkCount(status) {
-  return ['pass', 'partial', 'fail'].map(k => [status.filter(s => s === k).length, LABEL[k].toLowerCase()])
+  return ['pass', 'partial', 'fail', 'na'].map(k => [status.filter(s => s === k).length, LABEL[k].toLowerCase()])
     .filter(([n]) => n > 0).map(([n, l]) => n + ' ' + l).join(', ');
 }
 function summaryText(c, res) {
-  if (!res) return 'Burgerium outlet check: ' + c.missing + ' numbers still to fill.';
+  if (!res) return 'Outlet check for ' + state.name + ': ' + c.missing + ' numbers still to fill.';
   const V = VERDICTS[res.verdict], m = res.m;
-  const L = ['Burgerium outlet check' + (state.example ? ' (example numbers)' : ''), dLong(new Date()), '',
+  const L = ['Outlet check for ' + state.name + (state.example ? ' (example numbers)' : ''), dLong(new Date()), '',
     'Result: ' + V.head + '. ' + V.tail, 'Next step: ' + V.next, '', 'The 8 checks: ' + checkCount(res.status)];
   TESTS.forEach((x, i) => L.push((i + 1) + '. ' + x.q + ' ' + LABEL[res.status[i]] + ': ' + testValue(i, m)));
   L.push('', 'Orders per day now: ' + one(m.ordersDay), 'Break-even orders per day: ' + (m.beDay === null ? 'never' : one(m.beDay)),
@@ -854,6 +915,7 @@ function histChart(list) {
   return s;
 }
 function renderHistory() {
+  $('hist-title').textContent = store.outlets.length > 1 ? 'Saved checks for ' + state.name : 'Saved checks';
   const list = state.history.slice().sort((a, b) => a.at < b.at ? -1 : 1);
   $('hist-chart').innerHTML = histChart(list);
   $('hist').innerHTML = !list.length
@@ -923,7 +985,42 @@ function twoStep(btn, action, armedText) {
     clearTimeout(timer); armed = false; btn.textContent = label; action();
   });
 }
-function replaceState(s) { state = normalise(s); fill(); showStep(); refresh(); renderHistory(); }
+// ---------- outlets ----------
+function useOutlet(o) { state = o; store.current = o.id; fill(); showStep(); refresh(); renderHistory(); renderOutlets(); }
+function renderOutlets() {
+  const pick = $('outlet-pick'); pick.textContent = '';
+  store.outlets.forEach(o => { const op = document.createElement('option'); op.value = o.id; op.textContent = o.name; op.selected = o.id === state.id; pick.appendChild(op); });
+  const many = store.outlets.length > 1;
+  $('bar-outlet').hidden = !many; $('bar-outlet').textContent = state.name;
+  $('del-outlet-row').hidden = !many;
+}
+let editMode = null; // 'rename', 'new', or 'start' (naming the outlet right after leaving the example numbers)
+function openEdit(mode) {
+  editMode = mode;
+  $('outlet-row').hidden = true; $('btn-rename').hidden = true; $('outlet-edit').hidden = false;
+  const l = $('outlet-l'), inp = $('outlet-name');
+  l.htmlFor = 'outlet-name'; l.textContent = mode === 'new' ? 'Name of the new outlet' : 'Outlet name';
+  inp.value = mode === 'new' ? '' : state.name; inp.focus(); inp.select();
+}
+function closeEdit() {
+  editMode = null;
+  $('outlet-edit').hidden = true; $('outlet-row').hidden = false; $('btn-rename').hidden = false;
+  const l = $('outlet-l'); l.htmlFor = 'outlet-pick'; l.textContent = 'Outlet';
+}
+function saveEdit() {
+  const name = cleanName($('outlet-name').value), mode = editMode;
+  closeEdit();
+  if (mode === 'new') {
+    const o = newOutlet(name || 'Outlet ' + (store.outlets.length + 1), false);
+    store.outlets.push(o); useOutlet(o);
+    if (location.hash !== '#numbers') location.hash = '#numbers';
+    toast('Added ' + o.name); $('f-dineOrders').focus();
+    return;
+  }
+  if (name && name !== state.name) { state.name = name; renderOutlets(); refresh(); renderHistory(); toast('Renamed to ' + name); }
+  if (mode === 'start') $('f-dineOrders').focus(); else $('btn-rename').focus();
+}
+const countOutlets = n => n + (n === 1 ? ' outlet' : ' outlets');
 function download(name, text) {
   const url = URL.createObjectURL(new Blob([text], { type:'application/json' }));
   const a = document.createElement('a'); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
@@ -953,7 +1050,19 @@ function wire() {
     if (i >= 0 && i < inputs.length - 1) inputs[i + 1].focus(); else next();
   });
   $('ticket').addEventListener('click', e => { const b = e.target.closest('[data-goto]'); if (b) { location.hash = '#numbers'; route(); goStep(Number(b.dataset.goto), true); } });
-  $('btn-start').addEventListener('click', () => { replaceState(blankState(state.history)); $('f-dineOrders').focus(); });
+  $('btn-start').addEventListener('click', () => {
+    resetOutlet(state, false); if (state.name === 'Example outlet') state.name = 'My outlet';
+    useOutlet(state); openEdit('start');
+  });
+  $('outlet-pick').addEventListener('change', e => {
+    const o = store.outlets.find(x => x.id === e.target.value);
+    if (o && o !== state) { useOutlet(o); toast('Showing ' + o.name); }
+  });
+  $('btn-rename').addEventListener('click', () => openEdit('rename'));
+  $('btn-new').addEventListener('click', () => openEdit('new'));
+  $('outlet-edit').addEventListener('submit', e => { e.preventDefault(); saveEdit(); });
+  $('btn-name-cancel').addEventListener('click', () => { const m = editMode; closeEdit(); $(m === 'new' ? 'btn-new' : 'btn-rename').focus(); });
+  $('outlet-name').addEventListener('keydown', e => { if (e.key === 'Escape') { e.preventDefault(); $('btn-name-cancel').click(); } });
   $('btn-thr').addEventListener('click', () => { state.thr = {}; fill(); refresh(); });
   $('btn-save').addEventListener('click', () => {
     if (!lastRes) { toast('Fill in every number first.'); return; }
@@ -971,7 +1080,7 @@ function wire() {
   });
   if (!framed && navigator.share) {
     $('btn-share').hidden = false;
-    $('btn-share').addEventListener('click', () => { navigator.share({ title:'Burgerium outlet check', text: summaryText(last, lastRes) }).catch(() => {}); });
+    $('btn-share').addEventListener('click', () => { navigator.share({ title:'Outlet check for ' + state.name, text: summaryText(last, lastRes) }).catch(() => {}); });
   }
   if (!framed) { $('btn-print').hidden = false; $('btn-print').addEventListener('click', () => window.print()); }
 
@@ -990,17 +1099,37 @@ function wire() {
     $('backup-row').querySelector('#btn-backup').hidden = true;
     $('data-note').textContent = 'Numbers are saved in this browser only. In this preview you can restore a backup; downloading one, sharing and printing work once the app is on its own website.';
   } else {
-    $('data-note').textContent = 'Numbers are saved in this browser only. Clearing browser data wipes them, so download a backup now and then.';
-    $('btn-backup').addEventListener('click', () => { download('burgerium-outlet-check-' + new Date().toISOString().slice(0, 10) + '.json', JSON.stringify(state, null, 2)); toast('Backup downloaded'); });
+    $('data-note').textContent = 'Numbers are saved in this browser only. Clearing browser data wipes them, so download a backup now and then. The backup includes every outlet.';
+    $('btn-backup').addEventListener('click', () => { download('outlet-check-' + new Date().toISOString().slice(0, 10) + '.json', JSON.stringify(store, null, 2)); toast('Backup downloaded: ' + countOutlets(store.outlets.length)); });
   }
   $('file-restore').addEventListener('change', async e => {
     const f = e.target.files && e.target.files[0]; e.target.value = '';
     if (!f) return;
-    try { const d = JSON.parse(await f.text()); if (!valid(d)) throw new Error('shape'); replaceState(d); toast('Backup restored'); }
-    catch (err) { toast('That file isn’t a backup from this app.'); }
+    let incoming, pickId;
+    try {
+      const d = JSON.parse(await f.text());
+      if (validStore(d)) { normaliseStore(d); incoming = d.outlets; pickId = d.current; }
+      else if (validOutlet(d)) { if (!cleanName(d.name)) d.name = 'Restored outlet'; incoming = [normalise(d)]; pickId = incoming[0].id; }
+      else throw new Error('shape');
+    } catch (err) { toast('That file isn’t a backup from this app.'); return; }
+    // An outlet already on this device is replaced by its copy in the backup; every other outlet is kept.
+    incoming.forEach(o => { const i = store.outlets.findIndex(x => x.id === o.id); if (i >= 0) store.outlets[i] = o; else store.outlets.push(o); });
+    useOutlet(store.outlets.find(x => x.id === pickId) || incoming[0]);
+    toast('Backup restored: ' + countOutlets(incoming.length));
   });
-  twoStep($('btn-clear'), () => { replaceState(blankState(state.history)); toast('Numbers cleared. Saved checks are kept.'); });
-  twoStep($('btn-example'), () => { replaceState(exampleState(state.history)); toast('Example numbers loaded'); });
+  twoStep($('btn-clear'), () => { resetOutlet(state, false); useOutlet(state); toast('Numbers cleared. Saved checks are kept.'); });
+  // Example numbers open in their own outlet, so they never overwrite real ones.
+  $('btn-example').addEventListener('click', () => {
+    let o = store.outlets.find(x => x.example && x.name === 'Example outlet');
+    if (o) resetOutlet(o, true); else { o = newOutlet('Example outlet', true); store.outlets.push(o); }
+    useOutlet(o); location.hash = '#numbers'; toast('Showing the example outlet. Your outlets are unchanged.');
+  });
+  twoStep($('btn-del-outlet'), () => {
+    if (store.outlets.length < 2) return;
+    const name = state.name;
+    store.outlets = store.outlets.filter(o => o !== state);
+    useOutlet(store.outlets[0]); toast('Deleted ' + name);
+  }, 'Tap again to delete it and its saved checks');
 
   let installEvt = null;
   window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); installEvt = e; $('install-box').hidden = false; });
@@ -1011,9 +1140,10 @@ function wire() {
 }
 
 function start(data) {
-  state = valid(data) ? normalise(data) : (load() || exampleState());
-  build(); fill(); route(); showStep(); refresh(); renderHistory(); wire();
-  if (window.claude && window.claude.hot && window.claude.hot.snapshot) window.claude.hot.snapshot(() => state);
+  store = validStore(data) ? normaliseStore(data) : (load() || storeOf(newOutlet('Example outlet', true)));
+  state = store.outlets.find(o => o.id === store.current);
+  build(); fill(); route(); showStep(); refresh(); renderHistory(); renderOutlets(); wire();
+  if (window.claude && window.claude.hot && window.claude.hot.snapshot) window.claude.hot.snapshot(() => store);
 }
 const hot = window.claude && window.claude.hot;
 if (hot && hot.ready) hot.ready(start); else start((hot && hot.data) || {});
